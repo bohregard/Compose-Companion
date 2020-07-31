@@ -1,0 +1,126 @@
+plugins {
+    id("com.android.library")
+    id("kotlin-android")
+    id("maven-publish")
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.1"
+
+    defaultConfig {
+        minSdkVersion 26
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'com.bohregard.shared'
+                artifactId = 'shared'
+                version = '1.0.0'
+
+                pom {
+                    name = "Shared Library"
+                    description = "Shared Library"
+                    scm {
+                        connection = "scm:git:git://github.com:bohregard/Shared-Library"
+                        developerConnection = "scm:git:ssh://github.com:bohregard/Shared-Library"
+                        url = "https://github.com/bohregard/Shared-Library"
+                    }
+                }
+            }
+            debug(MavenPublication) {
+                from components.debug
+
+                groupId = 'com.bohregard.shared'
+                artifactId = 'shared'
+                version = '1.0.0-SNAPSHOT'
+
+                pom {
+                    name = "Shared Library"
+                    description = "Shared Library"
+                    scm {
+                        connection = "scm:git:git://github.com:bohregard/Shared-Library"
+                        developerConnection = "scm:git:ssh://github.com:bohregard/Shared-Library"
+                        url = "https://github.com/bohregard/Shared-Library"
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                credentials {
+                    username mavenRepositoryUsername
+                    password mavenRepositoryPassword
+                }
+                name = "github"
+                url = "https://maven.pkg.github.com/bohregard/Shared-Library"
+            }
+        }
+    }
+}
+
+dependencies {
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
+
+    // Compose
+    api("androidx.compose.runtime:runtime:$compose_version")
+    api("androidx.compose.foundation:foundation:$compose_version")
+    api("androidx.compose.foundation:foundation-layout:$compose_version")
+    api("androidx.compose.material:material:$compose_version")
+    api("androidx.compose.animation:animation:$compose_version")
+    api("androidx.ui:ui-tooling:$compose_version")
+    api "dev.chrisbanes.accompanist:accompanist-coil:0.1.7"
+
+    // Web
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+//    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+//    implementation "com.squareup.moshi:moshi:$moshi_version"
+//    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
+//    implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
+//    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+
+    // DI
+    implementation 'org.kodein.di:kodein-di-framework-android-core:7.0.0'
+    implementation 'org.kodein.di:kodein-di-framework-android-x:7.0.0'
+
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += ["-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check"]
+    }
+}
