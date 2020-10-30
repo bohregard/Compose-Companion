@@ -1,7 +1,7 @@
-package com.bohregard.shared
+package com.bohregard.shared.compose
 
-import androidx.compose.Composable
-import androidx.compose.onDispose
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.onDispose
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
