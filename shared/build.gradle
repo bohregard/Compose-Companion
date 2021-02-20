@@ -4,9 +4,12 @@ plugins {
     id("maven-publish")
 }
 
+apply from: '../maven-publish-helper.gradle'
+
+def globalConf = rootProject.ext
+
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
 
     defaultConfig {
         minSdkVersion 26
@@ -31,92 +34,43 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerVersion "1.4.0"
-        kotlinCompilerExtensionVersion "$compose_compiler_extension_version"
-    }
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-
-                groupId = 'com.bohregard'
-                artifactId = 'shared'
-                version = '1.0.0'
-
-                pom {
-                    name = "Shared Library"
-                    description = "Shared Library"
-                    scm {
-                        connection = "scm:git:git://github.com:bohregard/Shared-Library"
-                        developerConnection = "scm:git:ssh://github.com:bohregard/Shared-Library"
-                        url = "https://github.com/bohregard/Shared-Library"
-                    }
-                }
-            }
-            debug(MavenPublication) {
-                from components.debug
-
-                groupId = 'com.bohregard'
-                artifactId = 'shared'
-                version = '1.0.0-SNAPSHOT'
-
-                pom {
-                    name = "Shared Library"
-                    description = "Shared Library"
-                    scm {
-                        connection = "scm:git:git://github.com:bohregard/Shared-Library"
-                        developerConnection = "scm:git:ssh://github.com:bohregard/Shared-Library"
-                        url = "https://github.com/bohregard/Shared-Library"
-                    }
-                }
+publishing {
+    publications {
+        release(MavenPublication) {
+            artifactId = 'shared'
+            pom {
+                name = "Shared Library"
+                description = "Shared Library"
             }
         }
-
-        repositories {
-            maven {
-                credentials {
-                    username mavenRepositoryUsername
-                    password mavenRepositoryPassword
-                }
-                name = "github"
-                url = "https://maven.pkg.github.com/bohregard/Shared-Library"
+        debug(MavenPublication) {
+            artifactId = 'shared'
+            pom {
+                name = "Shared Library"
+                description = "Shared Library"
             }
         }
     }
 }
 
 dependencies {
+    Map<String, String> dependencies = globalConf.commonDependencies
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation dependencies.core
+    implementation dependencies.appCompat
+    implementation dependencies.material
 
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-
-    // Compose
-    api("androidx.compose.runtime:runtime:$compose_version")
-    api("androidx.compose.foundation:foundation:$compose_version")
-    api("androidx.compose.foundation:foundation-layout:$compose_version")
-    api("androidx.compose.material:material:$compose_version")
-    api("androidx.compose.animation:animation:$compose_version")
-    api("androidx.ui:ui-tooling:$compose_version")
-//    api("dev.chrisbanes.accompanist:accompanist-coil:0.1.7")
-
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9'
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+    api dependencies.coroutinesCore
+    api dependencies.coroutinesAndroid
 
     // Moshi
     implementation("com.squareup.moshi:moshi:$moshi_version")
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }

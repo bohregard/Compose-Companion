@@ -16,3 +16,15 @@ fun Long.toSizeString(): String {
         }
     }
 }
+
+fun Int.readableString(): String {
+    return when {
+        this > 999_999 -> {
+            "${this/1_000_000}M"
+        }
+        this > 999 -> {
+            "${this/1000}K"
+        }
+        else -> "$this"
+    }
+}

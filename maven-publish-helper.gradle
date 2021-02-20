@@ -1,0 +1,77 @@
+apply plugin: 'maven-publish'
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    android.libraryVariants.all { variant ->
+        if (variant.name == 'release') {
+            owner.classpath += variant.javaCompileProvider.get().classpath
+        }
+    }
+    exclude '**/R.html', '**/R.*.html', '**/index.html'
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    archiveClassifier.set('javadoc')
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+//                artifact androidJavadocsJar
+                artifact androidSourcesJar
+
+                groupId = 'com.bohregard'
+//                artifactId = 'shared-compose-exoplayer'
+                version = library_version
+
+                pom {
+                    scm {
+                        connection = "scm:git:git://github.com:bohregard/Shared-Library"
+                        developerConnection = "scm:git:ssh://github.com:bohregard/Shared-Library"
+                        url = "https://github.com/bohregard/Shared-Library"
+                    }
+                }
+            }
+
+            debug(MavenPublication) {
+                from components.debug
+
+//                artifact androidJavadocsJar
+                artifact androidSourcesJar
+
+                groupId = 'com.bohregard'
+//                artifactId = 'shared-compose-exoplayer'
+                version = library_version
+
+                pom {
+                    scm {
+                        connection = "scm:git:git://github.com:bohregard/Shared-Library"
+                        developerConnection = "scm:git:ssh://github.com:bohregard/Shared-Library"
+                        url = "https://github.com/bohregard/Shared-Library"
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                credentials {
+                    username mavenRepositoryUsername
+                    password mavenRepositoryPassword
+                }
+                name = "github"
+                url = "https://maven.pkg.github.com/bohregard/Shared-Library"
+            }
+        }
+    }
+}

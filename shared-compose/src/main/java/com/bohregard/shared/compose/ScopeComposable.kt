@@ -1,7 +1,7 @@
 package com.bohregard.shared.compose
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onDispose
+import androidx.compose.runtime.DisposableEffect
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -13,8 +13,10 @@ fun Scope(children: @Composable CoroutineScope.() -> Unit) {
     val scope = CoroutineScope(job)
 
     children(scope)
-
-    onDispose(callback = {
-        job.cancel()
-    })
+    
+    DisposableEffect(Unit) {
+        onDispose {
+            job.cancel()
+        }
+    }
 }

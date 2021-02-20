@@ -1,10 +1,13 @@
 package com.bohregard.shared.compose
 
 import android.print.PrintDocumentAdapter
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.viewinterop.emitView
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.viewinterop.AndroidView
 
 
 class WebContext(
@@ -55,15 +58,17 @@ private fun WebView.setUrl(url: String) {
 fun WebComponent(
     url: String,
     webViewClient: WebViewClient = WebViewClient(),
-    webContext: WebContext
+    webContext: WebContext,
+    webChromeClient: WebChromeClient
 ) {
-    emitView(::WebView) {
+    AndroidView(viewBlock = ::WebView, modifier = Modifier.fillMaxSize()) {
+        it.setRef { view -> webContext.webView = view }
+        it.setUrl(url)
+        it.webViewClient = webViewClient
+        it.webChromeClient = webChromeClient
         it.settings.apply {
             javaScriptEnabled = webContext.javaScriptEnabled
             domStorageEnabled = webContext.domStorageEnabled
         }
-        it.setRef { view -> webContext.webView = view }
-        it.setUrl(url)
-        it.webViewClient = webViewClient
     }
 }

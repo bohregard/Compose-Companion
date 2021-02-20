@@ -38,10 +38,10 @@ fun JsonReader.readObjectByName(name: String, work: JsonReader.() -> Unit) {
 
 inline fun <reified T> JsonReader.readArrayObject(
     list: MutableList<T>,
-    crossinline work: JsonReader.(map: MutableMap<String, Any>) -> Unit
+    crossinline work: JsonReader.(map: MutableMap<String, Any?>) -> Unit
 ) {
     readArray {
-        val map = mutableMapOf<String, Any>()
+        val map = mutableMapOf<String, Any?>()
         readObject {
             work(map)
         }
