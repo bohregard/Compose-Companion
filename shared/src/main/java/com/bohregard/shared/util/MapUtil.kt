@@ -1,5 +1,7 @@
 package com.bohregard.shared.util
 
+import com.bohregard.shared.logger.debug
+import java.time.Instant
 import kotlin.reflect.full.createType
 
 inline fun <reified T> MutableMap<String, Any?>.toClass(): T {
@@ -8,6 +10,7 @@ inline fun <reified T> MutableMap<String, Any?>.toClass(): T {
             when (it.type) {
                 String::class.createType() -> ""
                 Int::class.createType() -> 0
+                Instant::class.createType(nullable = true) -> null
                 else -> ""
             }
         } else {

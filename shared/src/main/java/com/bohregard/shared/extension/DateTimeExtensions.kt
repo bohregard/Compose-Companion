@@ -10,12 +10,14 @@ fun LocalDateTime.toReadableString() = format(DateTimeFormatter.ofPattern("yyyy-
 fun LocalDateTime.temporalString(): String {
     val time = toInstant(ZoneOffset.UTC).toEpochMilli()/1000
     val currentTime = Instant.now().toEpochMilli()/1000
+
     return when (val diff = currentTime - time) {
-        in 0..60 -> "${diff}sec ago"
-        in 61..3600 -> "${diff/60}min ago "
-        in 3601..86400 -> "${diff/3600}h ago "
-        in 86401..345600 -> "${diff/86400}d ago "
-        in 345601..4147200 -> "${diff/345600}w ago "
-        else -> "${diff/4147200}m ago "
+        in 0..60 -> "${diff}s"
+        in 61..3600 -> "${diff/60}m"
+        in 3601..86400 -> "${diff/3600}h"
+        in 86401..604800 -> "${diff/86400}d"
+        in 604801..2628000 -> "${diff/604800}w"
+        in 2628001..31540000 -> "${diff/2628000}mo"
+        else -> "${diff/31540000}y"
     }
 }

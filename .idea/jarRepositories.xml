@@ -31,5 +31,10 @@
       <option name="name" value="maven" />
       <option name="url" value="https://dl.bintray.com/kotlin/kotlin-eap/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="https://androidx.dev/snapshots/builds/7202514/artifacts/repository" />
+    </remote-repository>
   </component>
 </project>

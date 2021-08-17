@@ -4,7 +4,9 @@ import android.print.PrintDocumentAdapter
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ImageView
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
@@ -54,6 +56,14 @@ private fun WebView.setUrl(url: String) {
     }
 }
 
+/**
+ * Given a url, build a WebView
+ *
+ * @param url
+ * @param webViewClient
+ * @param webContext
+ * @param webChromeClient
+ */
 @Composable
 fun WebComponent(
     url: String,
@@ -61,11 +71,37 @@ fun WebComponent(
     webContext: WebContext,
     webChromeClient: WebChromeClient
 ) {
-    AndroidView(viewBlock = ::WebView, modifier = Modifier.fillMaxSize()) {
+    AndroidView(factory = ::WebView, modifier = Modifier.fillMaxSize()) {
         it.setRef { view -> webContext.webView = view }
         it.setUrl(url)
         it.webViewClient = webViewClient
         it.webChromeClient = webChromeClient
+        it.settings.apply {
+            javaScriptEnabled = webContext.javaScriptEnabled
+            domStorageEnabled = webContext.domStorageEnabled
+        }
+    }
+}
+
+/**
+ * Given some HTML content, render the content in a WebView
+ *
+ * @param text
+ * @param modifier
+ * @param webViewClient
+ * @param webContext
+ */
+@Composable
+fun WebViewFromString(
+    text: String,
+    modifier: Modifier = Modifier,
+    webViewClient: WebViewClient = WebViewClient(),
+    webContext: WebContext = WebContext()
+) {
+    AndroidView(factory = ::WebView, modifier = modifier) {
+        it.setRef { view -> webContext.webView = view }
+        it.loadData(text, null, null)
+        it.webViewClient = webViewClient
         it.settings.apply {
             javaScriptEnabled = webContext.javaScriptEnabled
             domStorageEnabled = webContext.domStorageEnabled

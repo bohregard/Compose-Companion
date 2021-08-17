@@ -49,3 +49,16 @@ inline fun <reified T> JsonReader.readArrayObject(
         list.add(map.toClass())
     }
 }
+
+/**
+ * Reads and returns the string if it exists, otherwise consumes the token and returns null
+ *
+ * @return
+ */
+fun JsonReader.nextStringOrNull(): String? {
+    return if(peek() == JsonReader.Token.NULL) {
+        nextNull<String>()
+    } else {
+        nextString()
+    }
+}

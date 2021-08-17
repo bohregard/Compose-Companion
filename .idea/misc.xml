@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.1" />
+        <entry key="shared-compose-explayer/src/main/res/drawable/ic_error.xml" value="0.28541666666666665" />
         <entry key="shared-compose-explayer/src/main/res/layout/view_exoplayer.xml" value="0.13703140830800406" />
       </map>
     </option>
