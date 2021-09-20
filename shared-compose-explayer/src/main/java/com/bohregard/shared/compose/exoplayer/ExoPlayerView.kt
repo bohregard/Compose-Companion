@@ -35,8 +35,8 @@ private val TAG = "WaveCard"
  */
 @Composable
 fun ExoPlayerDashCompose(
+    modifier: Modifier = Modifier,
     dashUrl: String,
-    ratio: Float,
     clickable: SimpleExoPlayer.() -> Unit,
     onError: (@Composable () -> Unit)? = null,
     autoPlay: Boolean = false,
@@ -50,7 +50,7 @@ fun ExoPlayerDashCompose(
     player.setMediaSource(mediaSource)
     player.prepare()
 
-    BaseExoPlayer(player, clickable, onError, ratio, autoPlay)
+    BaseExoPlayer(modifier, player, clickable, onError, autoPlay)
 
     DisposableEffect(key1 = dashUrl) {
         onDispose {
@@ -70,8 +70,8 @@ fun ExoPlayerDashCompose(
  */
 @Composable
 fun ExoPlayerMp4Compose(
+    modifier: Modifier = Modifier,
     mp4Url: String,
-    ratio: Float,
     clickable: SimpleExoPlayer.() -> Unit,
     onError: (@Composable () -> Unit)? = null,
     autoPlay: Boolean = false,
@@ -85,7 +85,7 @@ fun ExoPlayerMp4Compose(
     player.setMediaSource(mediaSource)
     player.prepare()
 
-    BaseExoPlayer(player, clickable, onError, ratio, autoPlay)
+    BaseExoPlayer(modifier, player, clickable, onError, autoPlay)
 
     DisposableEffect(key1 = mp4Url) {
         onDispose {
@@ -98,10 +98,10 @@ fun ExoPlayerMp4Compose(
 
 @Composable
 fun BaseExoPlayer(
+    modifier: Modifier = Modifier,
     player: SimpleExoPlayer,
     clickable: SimpleExoPlayer.() -> Unit,
     onError: (@Composable () -> Unit)?,
-    ratio: Float,
     autoPlay: Boolean,
 ) {
     Log.d(TAG, "Base Exo Player")
@@ -111,7 +111,7 @@ fun BaseExoPlayer(
     if (!isError) {
         AndroidView(
             factory = ::StyledPlayerView,
-            modifier = Modifier
+            modifier = modifier
                 .clickable {
                     clickable(player)
                 }
@@ -138,9 +138,6 @@ fun BaseExoPlayer(
                         }
                     }
                 }
-                .fillMaxHeight()
-                .fillMaxWidth()
-                .aspectRatio(ratio)
         ) {
             it.player = player
             it.hideController()
