@@ -7,10 +7,14 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import com.bohregard.shared.compose.markdown.LocalMarkdownBoldStyle
+import com.bohregard.shared.compose.markdown.LocalMarkdownTextStyle
 import org.commonmark.node.*
 
 @Composable
 fun AnnotatedString.Builder.AppendMarkdownChildren(parent: Node) {
+    val textStyle = LocalMarkdownTextStyle.current
+    val boldStyle = LocalMarkdownBoldStyle.current
     var child = parent.firstChild
     while (child != null) {
         when (child) {
@@ -21,7 +25,7 @@ fun AnnotatedString.Builder.AppendMarkdownChildren(parent: Node) {
                 pop()
             }
             is StrongEmphasis -> {
-                pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
+                pushStyle(boldStyle)
                 AppendMarkdownChildren(child)
                 pop()
             }
@@ -37,7 +41,9 @@ fun AnnotatedString.Builder.AppendMarkdownChildren(parent: Node) {
                 pop()
             }
             is Text -> {
+                pushStyle(textStyle)
                 append(child.literal)
+                pop()
             }
             is HardLineBreak -> {
                 append("\n")
