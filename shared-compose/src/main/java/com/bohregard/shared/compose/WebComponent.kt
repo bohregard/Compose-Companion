@@ -69,13 +69,15 @@ fun WebComponent(
     url: String,
     webViewClient: WebViewClient = WebViewClient(),
     webContext: WebContext,
-    webChromeClient: WebChromeClient
+    webChromeClient: WebChromeClient? = null
 ) {
     AndroidView(factory = ::WebView, modifier = Modifier.fillMaxSize()) {
         it.setRef { view -> webContext.webView = view }
         it.setUrl(url)
         it.webViewClient = webViewClient
-        it.webChromeClient = webChromeClient
+        if (webChromeClient != null) {
+            it.webChromeClient = webChromeClient
+        }
         it.settings.apply {
             javaScriptEnabled = webContext.javaScriptEnabled
             domStorageEnabled = webContext.domStorageEnabled
