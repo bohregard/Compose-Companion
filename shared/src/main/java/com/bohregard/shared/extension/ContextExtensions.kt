@@ -1,6 +1,8 @@
 package com.bohregard.shared.extension
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.widget.Toast
 import androidx.annotation.StringRes
 
@@ -42,4 +44,18 @@ inline fun <reified T: Context> T.makeLongText(@StringRes text: Int) {
  */
 inline fun <reified T: Context> T.makeLongText(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+}
+
+/**
+ * Loop through and find the first Activity
+ *
+ * @return
+ */
+fun Context.findActivity(): Activity? {
+    var context = this
+    while (context is ContextWrapper) {
+        if (context is Activity) return context
+        context = context.baseContext
+    }
+    return null
 }

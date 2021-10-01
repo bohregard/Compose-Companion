@@ -63,6 +63,7 @@ publishing {
 dependencies {
     Map<String, String> dependencies = globalConf.commonDependencies
 
+    implementation project(":shared")
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation dependencies.core
     implementation dependencies.appCompat

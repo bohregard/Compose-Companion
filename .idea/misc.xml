@@ -4,7 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.1" />
+        <entry key="../../../.gradle/caches/transforms-3/73acd9412eab900a1e5b3c54244c4d09/transformed/jetified-exoplayer-ui-2.13.1/res/layout/exo_styled_player_control_view.xml" value="0.45" />
         <entry key="shared-compose-explayer/src/main/res/drawable/ic_error.xml" value="0.28541666666666665" />
+        <entry key="shared-compose-explayer/src/main/res/layout/exo_styled_player_control_view.xml" value="0.4891304347826087" />
+        <entry key="shared-compose-explayer/src/main/res/layout/exo_styled_player_controler_view.xml" value="0.45" />
         <entry key="shared-compose-explayer/src/main/res/layout/view_exoplayer.xml" value="0.13703140830800406" />
       </map>
     </option>
