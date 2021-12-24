@@ -1,16 +1,17 @@
 package com.bohregard.example
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.Text
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.setContent
-import androidx.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import com.bohregard.example.ui.ExampleTheme
+import com.bohregard.shared.compose.components.TextField
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -29,10 +30,8 @@ fun Greeting(name: String) {
     Text(text = "Hello $name!")
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun DefaultPreview() {
-    ExampleTheme {
-        Greeting("Android")
-    }
+fun PreviewTextField() {
+    TextField(onClear = {}, onValueChange = {}, text = "")
 }

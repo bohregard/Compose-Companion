@@ -15,7 +15,8 @@ fun MDBlockChildren(parent: Node) {
             }
             is BlockQuote -> MDBlockQuote(child)
             is TableBlock -> MDTable(child)
-            else -> println(child)
+            is Image -> MDImage(child)
+            else -> println("Child: $child")
         }
         child = child.next
     }

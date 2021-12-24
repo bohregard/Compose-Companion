@@ -9,6 +9,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import com.bohregard.shared.compose.markdown.LocalMarkdownBoldStyle
 import com.bohregard.shared.compose.markdown.LocalMarkdownTextStyle
+import com.bohregard.shared.compose.markdown.components.MDImage
 import org.commonmark.node.*
 
 @Composable
@@ -48,7 +49,10 @@ fun AnnotatedString.Builder.AppendMarkdownChildren(parent: Node) {
             is HardLineBreak -> {
                 append("\n")
             }
-            else -> println(child)
+            is Image -> {
+                MDImage(child)
+            }
+            else -> println("Annotated Child: $child")
         }
         child = child.next
     }

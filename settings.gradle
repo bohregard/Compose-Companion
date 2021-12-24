@@ -1,7 +1,0 @@
-rootProject.name = "Bohregard Shared Library"
-include ':app'
-include ':shared'
-include ':shared-compose'
-include ':shared-compose-explayer'
-include ':shared-di'
-include ':shared-compose-markdown'

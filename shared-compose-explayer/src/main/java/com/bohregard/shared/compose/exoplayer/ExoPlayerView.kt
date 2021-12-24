@@ -50,7 +50,14 @@ fun ExoPlayerDashCompose(
     dashUrl: String,
     onError: (@Composable () -> Unit)? = null,
     autoPlay: Boolean = false,
-    cache: DataStoreCache = LocalDataStoreCache.current
+    cache: DataStoreCache = LocalDataStoreCache.current,
+    controls: (@Composable (
+        player: SimpleExoPlayer,
+        hasVolume: Boolean,
+        timeline: Long,
+        duration: Long,
+        isPlaying: Boolean
+    ) -> Unit)? = null,
 ): SimpleExoPlayer {
     val tmp = SimpleExoPlayer.Builder(LocalContext.current).build()
     val player by remember { mutableStateOf(tmp) }
@@ -64,7 +71,8 @@ fun ExoPlayerDashCompose(
         modifier = modifier,
         player = player,
         onError = onError,
-        autoPlay = autoPlay
+        autoPlay = autoPlay,
+        controls = controls
     )
 
     Log.d(TAG, "Player Key: $dashUrl")
@@ -91,7 +99,14 @@ fun ExoPlayerMp4Compose(
     mp4Url: String,
     onError: (@Composable () -> Unit)? = null,
     autoPlay: Boolean = false,
-    cache: DataStoreCache = LocalDataStoreCache.current
+    cache: DataStoreCache = LocalDataStoreCache.current,
+    controls: (@Composable (
+        player: SimpleExoPlayer,
+        hasVolume: Boolean,
+        timeline: Long,
+        duration: Long,
+        isPlaying: Boolean
+    ) -> Unit)? = null,
 ): SimpleExoPlayer {
     val tmp = SimpleExoPlayer.Builder(LocalContext.current).build()
     val player by remember { mutableStateOf(tmp) }
@@ -105,7 +120,8 @@ fun ExoPlayerMp4Compose(
         modifier = modifier,
         player = player,
         onError = onError,
-        autoPlay = autoPlay
+        autoPlay = autoPlay,
+        controls = controls
     )
 
     DisposableEffect(key1 = mp4Url) {
@@ -123,29 +139,32 @@ fun BaseExoPlayer(
     player: SimpleExoPlayer,
     onError: (@Composable () -> Unit)?,
     autoPlay: Boolean,
+    controls: (@Composable (
+        player: SimpleExoPlayer,
+        hasVolume: Boolean,
+        timeline: Long,
+        duration: Long,
+        isPlaying: Boolean
+    ) -> Unit)? = null,
 ) {
-    Log.d(TAG, "Base Exo Player")
     var isError by remember { mutableStateOf(false) }
-    Log.d(TAG, "Base Exo Player isError: $isError")
     val scope = rememberCoroutineScope()
     if (!isError) {
-        Log.d(TAG, "Building Player")
         Column(
             modifier = modifier.background(color = Color.Black)
         ) {
-            var timeline by remember { mutableStateOf("00:00") }
-            var duration by remember { mutableStateOf("00:00") }
+            var timeline by remember { mutableStateOf(0L) }
+            var duration by remember { mutableStateOf(0L) }
             var isPlaying by remember { mutableStateOf(false) }
             var hasVolume by remember { mutableStateOf(false) }
-            var volumeMax by remember { mutableStateOf(false) }
 
             val context = LocalContext.current
             DisposableEffect(Unit) {
                 val window = context.findActivity()?.window
                 window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 scope.launch {
-                    while(true) {
-                        timeline = player.currentPosition.toHourMinuteSecondString()
+                    while (true) {
+                        timeline = player.currentPosition
                         delay(200)
                     }
                 }
@@ -173,16 +192,16 @@ fun BaseExoPlayer(
                         override fun onPlaybackStateChanged(state: Int) {
                             super.onPlaybackStateChanged(state)
                             isPlaying = player.playWhenReady && state == STATE_READY
-                            duration = player.duration.toHourMinuteSecondString()
+                            duration = player.duration
                         }
 
                         override fun onIsPlayingChanged(d: Boolean) {
                             super.onIsPlayingChanged(d)
-                            duration = player.duration.toHourMinuteSecondString()
+                            duration = player.duration
                             isPlaying = d
                         }
 
-                        override fun onPlayerError(error: ExoPlaybackException) {
+                        override fun onPlayerError(error: PlaybackException) {
                             super.onPlayerError(error)
                             error.printStackTrace()
                             isError = true
@@ -190,7 +209,7 @@ fun BaseExoPlayer(
                     })
 
                     player.volume = 0f
-                    player.playWhenReady = true
+                    player.playWhenReady = autoPlay
                     playerView.controllerHideOnTouch = false
                     playerView.controllerAutoShow = false
                     playerView.controllerShowTimeoutMs = 0
@@ -200,60 +219,13 @@ fun BaseExoPlayer(
                 modifier = Modifier
                     .weight(1f)
             )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                val iconSize = 40.dp
-                Image(
-                    colorFilter = ColorFilter.tint(color = Color.White),
-                    contentDescription = "Play/Pause Button",
-                    modifier = Modifier
-                        .size(iconSize)
-                        .clickable {
-                            if (player.isPlaying) {
-                                player.pause()
-                            } else {
-                                player.play()
-                            }
-                        },
-                    painter = if (isPlaying) {
-                        painterResource(id = R.drawable.shared_bohregard_pause)
-                    } else {
-                        painterResource(id = R.drawable.shared_bohregard_play)
-                    }
-                )
-                Text(
-                    color = Color.White,
-                    modifier = Modifier.padding(horizontal = 10.dp),
-                    text = "$timeline • $duration"
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                if(hasVolume) {
-                    Image(
-                        colorFilter = ColorFilter.tint(color = Color.White),
-                        contentDescription = "Volume On / Off",
-                        modifier = Modifier
-                            .size(iconSize)
-                            .clickable {
-                                player.volume = if (player.volume == 0f) {
-                                    volumeMax = true
-                                    1f
-                                } else {
-                                    volumeMax = false
-                                    0f
-                                }
-                            },
-                        painter = if (volumeMax) {
-                            painterResource(id = R.drawable.shared_bohregard_volume_on)
-                        } else {
-                            painterResource(id = R.drawable.shared_bohregard_volume_off)
-                        }
-                    )
-                }
-            }
+            controls?.invoke(
+                player,
+                hasVolume,
+                timeline,
+                duration,
+                isPlaying
+            )
         }
     } else {
         onError?.invoke()

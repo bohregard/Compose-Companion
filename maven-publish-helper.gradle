@@ -31,7 +31,6 @@ afterEvaluate {
                 artifact androidSourcesJar
 
                 groupId = 'com.bohregard'
-//                artifactId = 'shared-compose-exoplayer'
                 version = library_version
 
                 pom {
@@ -50,7 +49,6 @@ afterEvaluate {
                 artifact androidSourcesJar
 
                 groupId = 'com.bohregard'
-//                artifactId = 'shared-compose-exoplayer'
                 version = library_version
 
                 pom {
