@@ -1,17 +1,17 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("kotlin-android")
+    id("maven-publish")
 }
+
+apply(from = "../maven-publish-helper.gradle")
 
 android {
     compileSdkVersion(31)
 
     defaultConfig {
-        applicationId = "com.bohregard.example"
         minSdkVersion(26)
         targetSdkVersion(31)
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,15 +41,28 @@ android {
     }
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            artifactId = "compose-datetime-picker"
+            pom {
+                name.set("Compose DateTime Picker Library")
+                description.set("Compose DateTime Picker Library")
+            }
+        }
+        create<MavenPublication>("debug") {
+            artifactId = "compose-datetime-picker"
+            pom {
+                name.set("Compose DateTime Picker Library")
+                description.set("Compose DateTime Picker Library")
+            }
+        }
+    }
+}
+
 dependencies {
-
-    implementation(project(":shared"))
-    implementation(project(":shared-compose"))
-    implementation(project(":datetime-picker"))
     implementation(libs.bundles.core)
-
     implementation(libs.bundles.compose)
-    implementation("androidx.activity:activity-compose:${Versions.activityCompose}")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
