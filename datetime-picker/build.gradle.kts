@@ -44,14 +44,14 @@ android {
 publishing {
     publications {
         create<MavenPublication>("release") {
-            artifactId = "compose-datetime-picker"
+            artifactId = "datetime-picker"
             pom {
                 name.set("Compose DateTime Picker Library")
                 description.set("Compose DateTime Picker Library")
             }
         }
         create<MavenPublication>("debug") {
-            artifactId = "compose-datetime-picker"
+            artifactId = "datetime-picker"
             pom {
                 name.set("Compose DateTime Picker Library")
                 description.set("Compose DateTime Picker Library")
