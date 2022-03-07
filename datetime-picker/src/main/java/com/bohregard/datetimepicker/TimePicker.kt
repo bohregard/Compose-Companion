@@ -7,6 +7,10 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActionScope
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,17 +21,29 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.time.LocalTime
 import kotlin.math.*
 
@@ -83,6 +99,11 @@ internal fun TimePicker(
         modifier = Modifier.fillMaxWidth()
     ) {
 
+        val scope = rememberCoroutineScope()
+        var keyboardMode by remember { mutableStateOf(false) }
+        val hourFocusRequester by remember { mutableStateOf(FocusRequester()) }
+        val minuteFocusRequester by remember { mutableStateOf(FocusRequester()) }
+
         var selectedHour by remember { mutableStateOf(time.hour % 12) }
         var offsetRotation by remember {
             mutableStateOf(
@@ -118,66 +139,57 @@ internal fun TimePicker(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .background(
-                        color = if (hourSelection) MaterialTheme.colorScheme.primaryContainer
-                        else MaterialTheme.colorScheme.surface,
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .fillMaxHeight()
-                    .aspectRatio(1f)
-                    .clickable {
-                        hourSelection = true
+            TimeText(
+                focusRequester = hourFocusRequester,
+                keyboardMode = keyboardMode,
+                onNext = {
+                    minuteFocusRequester.requestFocus()
+                },
+                onSelected = {
+                    hourSelection = true
+                },
+                onValueChanged = {
+                    if (it.toIntOrNull() != null) {
+                        val tmp = it.toInt()
+                        if (tmp <= 12) {
+                            selectedHour = tmp
+                        }
+                    } else if (it == "") {
+                        selectedHour = 0
                     }
-                    .padding(8.dp)
-            ) {
-                Text(
-                    color = if (hourSelection) MaterialTheme.colorScheme.onPrimaryContainer
-                    else MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.displayLarge,
-                    text = "$selectedHour"
-                )
-            }
+                },
+                selected = hourSelection,
+                value = "${if (selectedHour == 0) "" else selectedHour}",
+            )
             Text(
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(horizontal = 8.dp),
                 style = MaterialTheme.typography.displayLarge,
                 text = ":"
             )
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .background(
-                        color = if (!hourSelection) MaterialTheme.colorScheme.primaryContainer
-                        else MaterialTheme.colorScheme.surface,
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .fillMaxHeight()
-                    .aspectRatio(1f)
-                    .clickable {
-                        hourSelection = false
+            TimeText(
+                focusRequester = minuteFocusRequester,
+                keyboardMode = keyboardMode,
+                onNext = {
+                    hourFocusRequester.requestFocus()
+                },
+                onSelected = {
+                    hourSelection = false
+                },
+                onValueChanged = {
+                    Log.d("TAG", "It: $it")
+                    if (it.toIntOrNull() != null) {
+                        val tmp = it.toInt()
+                        if (tmp <= 59) {
+                            selectedMinute = tmp
+                        }
+                    } else if (it == "") {
+                        selectedMinute = 0
                     }
-                    .padding(8.dp)
-            ) {
-                Text(
-                    color = if (!hourSelection) MaterialTheme.colorScheme.onPrimaryContainer
-                    else MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.displayLarge,
-                    text = String.format("%02d", selectedMinute % 60)
-                )
-            }
+                },
+                selected = !hourSelection,
+                value = "$selectedMinute" // String.format("%02d", selectedMinute % 60),
+            )
             Spacer(modifier = Modifier.size(16.dp))
             Column {
                 Box(
@@ -240,98 +252,120 @@ internal fun TimePicker(
                 }
             }
         }
-        Spacer(modifier = Modifier.size(16.dp))
+        if (!keyboardMode) {
+            Spacer(modifier = Modifier.size(16.dp))
 
-        val haptic = LocalHapticFeedback.current
+            val haptic = LocalHapticFeedback.current
 
-        Crossfade(targetState = hourSelection) {
-            if (it) {
-                HourSelector(
-                    onDragEnd = {
-                        // Animate to the nearest value
-                        offsetRotation = (if (selectedHour == 12) 0f else selectedHour * 30f)
+            Crossfade(targetState = hourSelection) {
+                if (it) {
+                    HourSelector(
+                        onDragEnd = {
+                            // Animate to the nearest value
+                            offsetRotation = (if (selectedHour == 12) 0f else selectedHour * 30f)
 
-                        // Go to the next screen
-                        hourSelection = false
-                    },
-                    onOffsetChanged = { theta ->
-                        when {
-                            (theta > 355 || theta < 5) && selectedHour != 12 -> {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                selectedHour = 12
+                            // Go to the next screen
+                            hourSelection = false
+                        },
+                        onOffsetChanged = { theta ->
+                            when {
+                                (theta > 355 || theta < 5) && selectedHour != 12 -> {
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    selectedHour = 12
+                                }
+                                theta in 25f..35f && selectedHour != 1 -> {
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    selectedHour = 1
+                                }
+                                (theta < 65 && theta > 55) && selectedHour != 2 -> {
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    selectedHour = 2
+                                }
+                                (theta < 95 && theta > 85) && selectedHour != 3 -> {
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    selectedHour = 3
+                                }
+                                (theta < 125 && theta > 115) && selectedHour != 4 -> {
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    selectedHour = 4
+                                }
+                                (theta < 155 && theta > 145) && selectedHour != 5 -> {
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    selectedHour = 5
+                                }
+                                (theta < 185 && theta > 175) && selectedHour != 6 -> {
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    selectedHour = 6
+                                }
+                                (theta < 215 && theta > 205) && selectedHour != 7 -> {
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    selectedHour = 7
+                                }
+                                (theta < 245 && theta > 235) && selectedHour != 8 -> {
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    selectedHour = 8
+                                }
+                                (theta < 275 && theta > 265) && selectedHour != 9 -> {
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    selectedHour = 9
+                                }
+                                (theta < 305 && theta > 295) && selectedHour != 10 -> {
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    selectedHour = 10
+                                }
+                                theta in 325f..335f && selectedHour != 11 -> {
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    selectedHour = 11
+                                }
                             }
-                            theta in 25f..35f && selectedHour != 1 -> {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                selectedHour = 1
-                            }
-                            (theta < 65 && theta > 55) && selectedHour != 2 -> {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                selectedHour = 2
-                            }
-                            (theta < 95 && theta > 85) && selectedHour != 3 -> {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                selectedHour = 3
-                            }
-                            (theta < 125 && theta > 115) && selectedHour != 4 -> {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                selectedHour = 4
-                            }
-                            (theta < 155 && theta > 145) && selectedHour != 5 -> {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                selectedHour = 5
-                            }
-                            (theta < 185 && theta > 175) && selectedHour != 6 -> {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                selectedHour = 6
-                            }
-                            (theta < 215 && theta > 205) && selectedHour != 7 -> {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                selectedHour = 7
-                            }
-                            (theta < 245 && theta > 235) && selectedHour != 8 -> {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                selectedHour = 8
-                            }
-                            (theta < 275 && theta > 265) && selectedHour != 9 -> {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                selectedHour = 9
-                            }
-                            (theta < 305 && theta > 295) && selectedHour != 10 -> {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                selectedHour = 10
-                            }
-                            theta in 325f..335f && selectedHour != 11 -> {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                selectedHour = 11
-                            }
-                        }
 
-                        offsetRotation = theta
-                    },
-                    offsetRotation = offsetRotation,
-                )
-            } else {
-                MinuteSelector(
-                    onOffsetChanged = {
-                        minuteOffsetRotation = it
-                        if (selectedMinute != (it / 6).roundToInt()) {
-                            selectedMinute = (it / 6).roundToInt()
-                            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                        }
-                    },
-                    onDragEnd = {
-                        minuteOffsetRotation = (selectedMinute * 6).toFloat()
-                    },
-                    offsetRotation = minuteOffsetRotation
-                )
+                            offsetRotation = theta
+                        },
+                        offsetRotation = offsetRotation,
+                    )
+                } else {
+                    MinuteSelector(
+                        onOffsetChanged = {
+                            minuteOffsetRotation = it
+                            if (selectedMinute != (it / 6).roundToInt()) {
+                                selectedMinute = (it / 6).roundToInt()
+                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                            }
+                        },
+                        onDragEnd = {
+                            minuteOffsetRotation = (selectedMinute * 6).toFloat()
+                        },
+                        offsetRotation = minuteOffsetRotation
+                    )
+                }
             }
         }
 
         Spacer(modifier = Modifier.size(16.dp))
         Row(
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
         ) {
+            TextButton(
+                onClick = {
+                    keyboardMode = !keyboardMode
+                    scope.launch(Dispatchers.Main) {
+                        delay(150)
+                        hourFocusRequester.requestFocus()
+                    }
+                }
+            ) {
+                Image(
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                    contentDescription = null,
+                    modifier = Modifier,
+                    painter = painterResource(id = R.drawable.shared_bohregard_keyboard)
+                )
+            }
+            Spacer(
+                modifier = Modifier.weight(1f)
+            )
             TextButton(
                 onClick = {
                     onCancel()
@@ -587,6 +621,68 @@ private fun MinuteSelector(
                     center = center
                 )
             }
+        )
+    }
+}
+
+@Composable
+private fun TimeText(
+    focusRequester: FocusRequester,
+    keyboardMode: Boolean,
+    onNext: KeyboardActionScope.() -> Unit,
+    onSelected: () -> Unit,
+    onValueChanged: (String) -> Unit,
+    selected: Boolean,
+    value: String
+) {
+//    val textFieldValue = TextFieldValue(text = value)
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .background(
+                color = if (selected) MaterialTheme.colorScheme.primaryContainer
+                else MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(4.dp)
+            )
+            .border(
+                width = 2.dp,
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(4.dp)
+            )
+            .fillMaxHeight()
+            .aspectRatio(1f)
+            .clickable {
+                onSelected()
+            }
+            .padding(8.dp)
+    ) {
+        BasicTextField(
+            enabled = keyboardMode,
+            keyboardActions = KeyboardActions(
+                onNext = onNext
+            ),
+            keyboardOptions = KeyboardOptions(
+                autoCorrect = false,
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.Number,
+            ),
+            modifier = Modifier
+                .focusRequester(focusRequester)
+                .onFocusChanged {
+                    Log.d("TimePicker", "Is Focused: $it")
+                },
+//            onValueChange = {
+//                onValueChanged(it.text)
+//            },
+            onValueChange = onValueChanged,
+            singleLine = true,
+            textStyle = MaterialTheme.typography.displayLarge.copy(
+                color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer
+                else MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center
+            ),
+//            value = textFieldValue,
+            value = value
         )
     }
 }
