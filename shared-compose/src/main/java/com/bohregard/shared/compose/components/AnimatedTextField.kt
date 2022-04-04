@@ -1,8 +1,8 @@
 package com.bohregard.shared.compose.components
 
 import android.annotation.SuppressLint
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -15,9 +15,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
@@ -44,6 +42,7 @@ fun AnimatedTextField(
         capitalization = KeyboardCapitalization.Words,
         imeAction = ImeAction.Next
     ),
+    @DrawableRes leadingIcon: Int? = null,
     maxCharacters: Int? = null,
     maxLines: Int = Int.MAX_VALUE,
     modifier: Modifier = Modifier,
@@ -81,6 +80,7 @@ fun AnimatedTextField(
                 error = error,
                 innerTextField = innerTextField,
                 interactionSource = interactionSource,
+                leadingIcon = leadingIcon,
                 maxCharacters = maxCharacters,
                 movement = movement,
                 onClear = {
@@ -135,6 +135,7 @@ private fun DecorationBox(
     error: Boolean,
     innerTextField: @Composable () -> Unit,
     interactionSource: InteractionSource,
+    @DrawableRes leadingIcon: Int? = null,
     maxCharacters: Int?,
     movement: Animatable<Float, AnimationVector1D>,
     onClear: () -> Unit,
@@ -154,45 +155,46 @@ private fun DecorationBox(
             .heightIn(min = 40.dp)
             .fillMaxWidth()
     ) {
-        Box {
-            Row(
+        Row {
+
+            if (leadingIcon != null) {
+                Image(
+                    colorFilter = ColorFilter.tint(trailingIconColor),
+                    contentDescription = null,
+                    painter = painterResource(id = leadingIcon)
+                )
+                Spacer(modifier = Modifier.size(5.dp))
+            }
+
+            Column(
                 modifier = Modifier
-                    .heightIn(min = 40.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                    .weight(1f)
             ) {
-                Box(modifier = Modifier.fillMaxWidth()) {
+                Spacer(modifier = Modifier.size(5.dp))
+                Box {
                     if (text.isEmpty() && placeholder != null) {
                         Text(
                             color = colors.placeholderColor(enabled = enabled).value,
                             text = placeholder
                         )
                     }
-                    if (text.isNotEmpty()) {
-                        Image(
-                            colorFilter = ColorFilter.tint(trailingIconColor),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .clickable {
-                                    if (enabled) {
-                                        onClear()
-                                    }
-                                }
-                                .align(Alignment.CenterEnd),
-                            painter = painterResource(id = R.drawable.shared_bohregard_clear_text)
-                        )
-                    }
+                    innerTextField()
                 }
+                Spacer(modifier = Modifier.size(5.dp))
             }
 
-            Column(
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(end = 32.dp)
-            ) {
-                Spacer(modifier = Modifier.size(5.dp))
-                innerTextField()
-                Spacer(modifier = Modifier.size(5.dp))
+            if (text.isNotEmpty()) {
+                Image(
+                    colorFilter = ColorFilter.tint(trailingIconColor),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable {
+                            if (enabled) {
+                                onClear()
+                            }
+                        },
+                    painter = painterResource(id = R.drawable.shared_bohregard_clear_text)
+                )
             }
         }
         Divider(

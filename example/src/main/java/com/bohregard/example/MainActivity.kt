@@ -107,6 +107,7 @@ class MainActivity : ComponentActivity() {
                             var text by remember { mutableStateOf("") }
                             AnimatedTextField(
                                 enabled = enabled,
+                                leadingIcon = R.drawable.ic_person,
                                 maxCharacters = 12,
                                 onClear = { text = "" },
                                 onValueChange = { text = it },
