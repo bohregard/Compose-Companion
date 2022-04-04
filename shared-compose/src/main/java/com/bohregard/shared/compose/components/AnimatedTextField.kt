@@ -71,8 +71,19 @@ fun AnimatedTextField(
         targetValueByState = { colors.textColor(enabled = enabled).value }
     )
 
+    val cursorColor by transition.animateColor(
+        transitionSpec = { tween(durationMillis = 150) },
+        label = "TextColor",
+        targetValueByState = {
+            colors.cursorColor(
+                isError = error,
+                interactionSource = interactionSource
+            ).value
+        }
+    )
+
     BasicTextField(
-        cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
+        cursorBrush = SolidColor(cursorColor),
         decorationBox = @Composable { innerTextField ->
             DecorationBox(
                 colors = colors,

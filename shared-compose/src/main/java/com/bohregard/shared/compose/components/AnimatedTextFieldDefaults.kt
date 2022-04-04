@@ -10,6 +10,10 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.graphics.Color
 
 interface AnimatedTextFieldColors {
+
+    @Composable
+    fun cursorColor(isError: Boolean, interactionSource: InteractionSource): State<Color>
+
     @Composable
     fun textColor(enabled: Boolean): State<Color>
 
@@ -35,6 +39,7 @@ object AnimatedTextFieldDefaults {
         disabledColor: Color = Color.Gray,
     ) = DefaultAnimatedTextFieldColors(
         backgroundColor = backgroundColor,
+        cursorColor = MaterialTheme.colorScheme.primary,
         disabledColor = disabledColor,
         errorColor = MaterialTheme.colorScheme.error,
         placeholderColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),
@@ -44,12 +49,25 @@ object AnimatedTextFieldDefaults {
 
     class DefaultAnimatedTextFieldColors(
         private val backgroundColor: Color,
+        private val cursorColor: Color,
         private val disabledColor: Color,
         private val errorColor: Color,
         private val placeholderColor: Color,
         private val textColor: Color,
         private val focusColor: Color,
     ) : AnimatedTextFieldColors {
+
+        @Composable
+        override fun cursorColor(isError: Boolean, interactionSource: InteractionSource): State<Color> {
+            val isFocused by interactionSource.collectIsFocusedAsState()
+
+            val color = when {
+                isError -> errorColor
+                isFocused -> cursorColor
+                else -> textColor
+            }
+            return rememberUpdatedState(color)
+        }
 
         @Composable
         override fun textColor(enabled: Boolean): State<Color> {
