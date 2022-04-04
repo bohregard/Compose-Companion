@@ -179,7 +179,7 @@ fun BaseExoPlayer(
                     playerView.player = player
                     playerView.setShowBuffering(StyledPlayerView.SHOW_BUFFERING_WHEN_PLAYING)
                     player.repeatMode = REPEAT_MODE_ALL
-                    player.addListener(object : Player.EventListener {
+                    player.addListener(object : Player.Listener {
 
                         override fun onTracksChanged(
                             trackGroups: TrackGroupArray,

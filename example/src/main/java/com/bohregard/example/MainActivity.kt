@@ -7,17 +7,18 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.bohregard.datetimepicker.DatePicker
 import com.bohregard.datetimepicker.DateTimePicker
 import com.bohregard.datetimepicker.TimePicker
 import com.bohregard.example.ui.ExampleTheme
+import com.bohregard.shared.compose.components.AnimatedTextField
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
                     var showDateTimeDialog by remember { mutableStateOf(false) }
                     var showDateDialog by remember { mutableStateOf(false) }
                     var showTimeDialog by remember { mutableStateOf(false) }
+                    var enabled by remember { mutableStateOf(true) }
 
                     DateTimePicker(
                         date = LocalDateTime.now(),
@@ -75,7 +77,8 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize()
                     ) {
                         Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.padding(horizontal = 20.dp)
                         ) {
                             Button(onClick = {
                                 showDateTimeDialog = true
@@ -94,10 +97,39 @@ class MainActivity : ComponentActivity() {
                             }) {
                                 Text(text = "Show Time Dialog")
                             }
+
+                            Button(onClick = {
+                                enabled = !enabled
+                            }) {
+                                Text(text = if (enabled) "Disabled" else "Enable")
+                            }
+
+                            var text by remember { mutableStateOf("") }
+                            AnimatedTextField(
+                                enabled = enabled,
+                                maxCharacters = 12,
+                                onClear = { text = "" },
+                                onValueChange = { text = it },
+                                placeholder = "Placeholder",
+                                text = text
+                            )
                         }
                     }
                 }
             }
         }
+    }
+}
+
+
+@Preview(showSystemUi = true)
+@Composable
+fun PreviewAnimatedTextField() {
+    ExampleTheme {
+        AnimatedTextField(
+            onClear = {},
+            onValueChange = {},
+            text = "Some Neat thing or whatever"
+        )
     }
 }

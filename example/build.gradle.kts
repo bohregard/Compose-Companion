@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion(31)
+    compileSdk = Versions.compileSdk
 
     defaultConfig {
         applicationId = "com.bohregard.example"
-        minSdkVersion(26)
-        targetSdkVersion(31)
+        minSdk = Versions.minSdk
+        targetSdk = Versions.compileSdk
         versionCode = 1
         versionName = "1.0"
 
@@ -49,9 +49,8 @@ dependencies {
     implementation(libs.bundles.core)
 
     implementation(libs.bundles.compose)
-    implementation("androidx.activity:activity-compose:${Versions.activityCompose}")
+    implementation(libs.compose.activity)
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    testImplementation(testing.bundles.core)
+    androidTestImplementation(instrumentation.bundles.core)
 }

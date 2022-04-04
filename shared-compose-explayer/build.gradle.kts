@@ -7,11 +7,11 @@ plugins {
 apply(from = "../maven-publish-helper.gradle")
 
 android {
-    compileSdkVersion(31)
+    compileSdk = Versions.compileSdk
 
     defaultConfig {
-        minSdkVersion(26)
-        targetSdkVersion(31)
+        minSdk = Versions.minSdk
+        targetSdk = Versions.compileSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -67,9 +67,8 @@ dependencies {
     implementation(libs.bundles.compose)
 
     // ExoPlayer
-    implementation("com.google.android.exoplayer:exoplayer:2.16.1")
+    implementation(libs.exoplayer)
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    testImplementation(testing.bundles.core)
+    androidTestImplementation(instrumentation.bundles.core)
 }

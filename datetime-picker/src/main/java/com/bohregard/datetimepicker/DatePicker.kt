@@ -6,11 +6,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.TextButton
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -26,14 +26,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.bohregard.datetimepicker.R
 import java.time.LocalDate
 import java.time.Month
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DatePicker(
     date: LocalDate,
@@ -75,7 +74,6 @@ fun DatePicker(
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun DatePicker(
     date: LocalDate,
@@ -232,15 +230,14 @@ internal fun DatePicker(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun MonthGridUi(
     onMonthClicked: (Int) -> Unit
 ) {
     LazyVerticalGrid(
-        cells = GridCells.Fixed(3),
+        columns = GridCells.Fixed(3),
+        verticalArrangement = Arrangement.Center,
         horizontalArrangement = Arrangement.Center,
-        verticalArrangement = Arrangement.Center
     ) {
         items(12) {
             Box(
@@ -261,7 +258,6 @@ internal fun MonthGridUi(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun YearGridUi(
     onYearClicked: (Int) -> Unit,
@@ -270,7 +266,7 @@ internal fun YearGridUi(
     val yearPattern = DateTimeFormatter.ofPattern("yyyy")
     val decadeStart = selectedDate.withYear(selectedDate.year / 10 * 10)
     LazyVerticalGrid(
-        cells = GridCells.Fixed(3),
+        columns = GridCells.Fixed(3),
         horizontalArrangement = Arrangement.Center,
         verticalArrangement = Arrangement.Center
     ) {
@@ -290,7 +286,6 @@ internal fun YearGridUi(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun DateGridUi(
     onDateSelected: (LocalDate) -> Unit,
@@ -304,7 +299,7 @@ internal fun DateGridUi(
     val year = selectedDate.year
 
     LazyVerticalGrid(
-        cells = GridCells.Fixed(7),
+        columns = GridCells.Fixed(7),
         horizontalArrangement = Arrangement.Center,
         verticalArrangement = Arrangement.Center
     ) {

@@ -4,8 +4,8 @@ object Apps {
 }
 
 object Versions {
+    const val compileSdk = 31
+    const val minSdk = 26
     const val gradle = "7.2.0-alpha06"
-    const val kotlin = "1.6.0"
-    const val compose = "1.1.0-beta04"
-    const val activityCompose = "1.4.0"
+    const val compose = "1.2.0-alpha06" // update settings.gradle.kts as well
 }

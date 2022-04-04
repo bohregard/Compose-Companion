@@ -1,6 +1,6 @@
 package com.bohregard.datetimepicker
 
-enum class CalendarMode {
+internal enum class CalendarMode {
     DAY,
     MONTH,
     YEAR
