@@ -10,7 +10,7 @@ An animated text field that is configurable the same way a TextField is configur
 Example code:
 
 ```groovy
-implementation 'com.bohregard:animated-textfield:1.0.29-SNAPSHOT'
+implementation 'com.bohregard:animated-textfield:<latest-version>'
 ```
 
 ```kotlin
@@ -37,7 +37,7 @@ Returns a `LocalDateTime` object which can be converted to `Instant` if a UTC ti
 Example code:
 
 ```groovy
-implementation 'com.bohregard:datetime-picker:1.0.29-SNAPSHOT'
+implementation 'com.bohregard:datetime-picker:<latest-version>'
 ```
 
 ```kotlin
