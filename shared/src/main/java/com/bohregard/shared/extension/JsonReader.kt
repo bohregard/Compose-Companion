@@ -51,6 +51,14 @@ inline fun <reified T> JsonReader.readArrayObject(
 }
 
 /**
+ * Skip this value and name. Useful for iterating over named values.
+ */
+fun JsonReader.skip() {
+    skipName()
+    skipValue()
+}
+
+/**
  * Reads and returns the string if it exists, otherwise consumes the token and returns null
  *
  * @return
