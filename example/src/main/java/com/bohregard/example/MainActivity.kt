@@ -14,11 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bohregard.animatedtextfield.AnimatedTextField
 import com.bohregard.datetimepicker.DatePicker
 import com.bohregard.datetimepicker.DateTimePicker
 import com.bohregard.datetimepicker.TimePicker
 import com.bohregard.example.ui.ExampleTheme
-import com.bohregard.shared.compose.components.AnimatedTextField
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -36,41 +36,41 @@ class MainActivity : ComponentActivity() {
                     var showTimeDialog by remember { mutableStateOf(false) }
                     var enabled by remember { mutableStateOf(true) }
 
-                    DateTimePicker(
-                        date = LocalDateTime.now(),
-                        onDateSelected = {
-                            Log.d("DEBUG", "Selected DateTime: $it")
-                            showDateTimeDialog = false
-                        },
-                        onDialogDismissed = {
-                            showDateTimeDialog = false
-                        },
-                        showDialog = showDateTimeDialog
-                    )
-
-                    DatePicker(
-                        date = LocalDate.now(),
-                        onDateSelected = {
-                            Log.d("DEBUG", "Selected Date: $it")
-                            showDateDialog = false
-                        },
-                        onDialogDismissed = {
-                            showDateDialog = false
-                        },
-                        showDialog = showDateDialog
-                    )
-
-                    TimePicker(
-                        time = LocalTime.now(),
-                        onTimeSelected = {
-                            Log.d("DEBUG", "Selected Time: $it")
-                            showTimeDialog = false
-                        },
-                        onDialogDismissed = {
-                            showTimeDialog = false
-                        },
-                        showDialog = showTimeDialog
-                    )
+//                    DateTimePicker(
+//                        date = LocalDateTime.now(),
+//                        onDateSelected = {
+//                            Log.d("DEBUG", "Selected DateTime: $it")
+//                            showDateTimeDialog = false
+//                        },
+//                        onDialogDismissed = {
+//                            showDateTimeDialog = false
+//                        },
+//                        showDialog = showDateTimeDialog
+//                    )
+//
+//                    DatePicker(
+//                        date = LocalDate.now(),
+//                        onDateSelected = {
+//                            Log.d("DEBUG", "Selected Date: $it")
+//                            showDateDialog = false
+//                        },
+//                        onDialogDismissed = {
+//                            showDateDialog = false
+//                        },
+//                        showDialog = showDateDialog
+//                    )
+//
+//                    TimePicker(
+//                        time = LocalTime.now(),
+//                        onTimeSelected = {
+//                            Log.d("DEBUG", "Selected Time: $it")
+//                            showTimeDialog = false
+//                        },
+//                        onDialogDismissed = {
+//                            showTimeDialog = false
+//                        },
+//                        showDialog = showTimeDialog
+//                    )
 
                     Box(
                         contentAlignment = Alignment.Center,
@@ -80,23 +80,23 @@ class MainActivity : ComponentActivity() {
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier.padding(horizontal = 20.dp)
                         ) {
-                            Button(onClick = {
-                                showDateTimeDialog = true
-                            }) {
-                                Text(text = "Show DateTime Dialog")
-                            }
-
-                            Button(onClick = {
-                                showDateDialog = true
-                            }) {
-                                Text(text = "Show Date Dialog")
-                            }
-
-                            Button(onClick = {
-                                showTimeDialog = true
-                            }) {
-                                Text(text = "Show Time Dialog")
-                            }
+//                            Button(onClick = {
+//                                showDateTimeDialog = true
+//                            }) {
+//                                Text(text = "Show DateTime Dialog")
+//                            }
+//
+//                            Button(onClick = {
+//                                showDateDialog = true
+//                            }) {
+//                                Text(text = "Show Date Dialog")
+//                            }
+//
+//                            Button(onClick = {
+//                                showTimeDialog = true
+//                            }) {
+//                                Text(text = "Show Time Dialog")
+//                            }
 
                             Button(onClick = {
                                 enabled = !enabled

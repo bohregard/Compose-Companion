@@ -1,19 +1,21 @@
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+    id("maven-publish")
 }
 
+apply(from = "../maven-publish-helper.gradle")
+
 android {
+    namespace = "com.bohregard.animatedtextfield"
     compileSdk = Versions.compileSdk
 
     defaultConfig {
-        applicationId = "com.bohregard.example"
         minSdk = Versions.minSdk
         targetSdk = Versions.compileSdk
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -25,6 +27,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -41,16 +44,28 @@ android {
     }
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            artifactId = "animated-textfield"
+            pom {
+                name.set("Compose Animated Textfield Library")
+                description.set("Compose Animated Textfield Library")
+            }
+        }
+        create<MavenPublication>("debug") {
+            artifactId = "animated-textfield"
+            pom {
+                name.set("Compose Animated Textfield Library")
+                description.set("Compose Animated Textfield Library")
+            }
+        }
+    }
+}
+
 dependencies {
-
-    implementation(project(":shared"))
-    implementation(project(":shared-compose"))
-    implementation(project(":datetime-picker"))
-    implementation(project(":animated-textfield"))
     implementation(libs.bundles.core)
-
     implementation(libs.bundles.compose)
-    implementation(libs.compose.activity)
 
     testImplementation(testing.bundles.core)
     androidTestImplementation(instrumentation.bundles.core)

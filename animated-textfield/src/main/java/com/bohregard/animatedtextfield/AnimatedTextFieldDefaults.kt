@@ -1,4 +1,4 @@
-package com.bohregard.shared.compose.components
+package com.bohregard.animatedtextfield
 
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState

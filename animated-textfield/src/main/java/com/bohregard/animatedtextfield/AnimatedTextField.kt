@@ -1,8 +1,8 @@
-package com.bohregard.shared.compose.components
+package com.bohregard.animatedtextfield
 
 import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
-import androidx.compose.animation.animateColor
+import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -23,9 +23,10 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bohregard.shared.compose.R
+import com.bohregard.animatedtextfield.R
 import kotlinx.coroutines.launch
 
 @SuppressLint("ModifierParameter", "UnusedTransitionTargetStateParameter")
@@ -35,6 +36,7 @@ fun AnimatedTextField(
     colors: AnimatedTextFieldColors = AnimatedTextFieldDefaults.colors(),
     enabled: Boolean = true,
     error: Boolean = false,
+    errorMessage: String? = null,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     keyboardActions: KeyboardActions = KeyboardActions(),
     keyboardOptions: KeyboardOptions = KeyboardOptions(
@@ -51,6 +53,7 @@ fun AnimatedTextField(
     readOnly: Boolean = false,
     placeholder: String? = null,
     text: String,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     var textFieldValue by remember { mutableStateOf(TextFieldValue(text = text)) }
 
@@ -89,6 +92,7 @@ fun AnimatedTextField(
                 colors = colors,
                 enabled = enabled,
                 error = error,
+                errorMessage = errorMessage,
                 innerTextField = innerTextField,
                 interactionSource = interactionSource,
                 leadingIcon = leadingIcon,
@@ -134,7 +138,8 @@ fun AnimatedTextField(
         textStyle = MaterialTheme.typography.bodyLarge.copy(
             color = textColor
         ),
-        value = textFieldValue
+        value = textFieldValue,
+        visualTransformation = visualTransformation
     )
 }
 
@@ -144,6 +149,7 @@ private fun DecorationBox(
     colors: AnimatedTextFieldColors,
     enabled: Boolean,
     error: Boolean,
+    errorMessage: String?,
     innerTextField: @Composable () -> Unit,
     interactionSource: InteractionSource,
     @DrawableRes leadingIcon: Int? = null,
@@ -212,11 +218,27 @@ private fun DecorationBox(
             color = trailingIconColor,
             thickness = 1.dp
         )
-        if (maxCharacters != null) {
-            Row(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier.fillMaxWidth()
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.weight(1f)
             ) {
+                AnimatedVisibility(
+                    enter = slideInHorizontally() + expandIn(),
+                    exit = slideOutHorizontally() + shrinkOut(),
+                    visible = errorMessage != null && error
+                ) {
+                    Text(
+                        color = trailingIconColor,
+                        fontSize = 12.sp,
+                        modifier = Modifier.fillMaxWidth(),
+                        text = errorMessage!!
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.size(10.dp))
+            if (maxCharacters != null) {
                 Text(
                     color = trailingIconColor,
                     fontSize = 12.sp,

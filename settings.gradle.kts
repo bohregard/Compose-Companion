@@ -6,7 +6,8 @@ include(
     ":shared-compose",
     ":shared-compose-explayer",
     ":datetime-picker",
-    ":shared-compose-markdown"
+    ":shared-compose-markdown",
+    ":animated-textfield"
 )
 
 dependencyResolutionManagement {
