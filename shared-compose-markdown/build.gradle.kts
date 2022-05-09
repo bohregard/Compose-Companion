@@ -44,17 +44,17 @@ android {
 publishing {
     publications {
         create<MavenPublication>("release") {
-            artifactId = "shared-compose-exoplayer"
+            artifactId = "shared-compose-markdown"
             pom {
-                name.set("Shared Compose Exoplayer Library")
-                description.set("Shared Compose Exoplayer Library")
+                name.set("Shared Compose Markdown Library")
+                description.set("Shared Compose Markdown Library")
             }
         }
         create<MavenPublication>("debug") {
-            artifactId = "shared-compose-exoplayer"
+            artifactId = "shared-compose-markdown"
             pom {
-                name.set("Shared Compose Exoplayer Library")
-                description.set("Shared Compose Exoplayer Library")
+                name.set("Shared Compose Markdown Library")
+                description.set("Shared Compose Markdown Library")
             }
         }
     }
