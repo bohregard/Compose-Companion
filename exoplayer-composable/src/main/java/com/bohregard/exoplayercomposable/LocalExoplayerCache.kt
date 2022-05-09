@@ -1,7 +1,6 @@
-package com.bohregard.shared.compose.exoplayer
+package com.bohregard.exoplayercomposable
 
 import android.content.Context
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.google.android.exoplayer2.database.ExoDatabaseProvider

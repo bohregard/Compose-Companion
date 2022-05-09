@@ -1,4 +1,4 @@
-package com.bohregard.shared.compose.exoplayer.extension
+package com.bohregard.exoplayercomposable.extension
 
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.util.MimeTypes

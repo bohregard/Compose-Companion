@@ -1,119 +1,45 @@
 package com.bohregard.example
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.bohregard.animatedtextfield.AnimatedTextField
-import com.bohregard.datetimepicker.DatePicker
-import com.bohregard.datetimepicker.DateTimePicker
-import com.bohregard.datetimepicker.TimePicker
-import com.bohregard.example.ui.ExampleTheme
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
+import com.bohregard.example.ui.*
+import com.bohregard.exoplayercomposable.DataStoreCache
 
 class MainActivity : ComponentActivity() {
+    private val datastoreCache by lazy { DataStoreCache(this, R.string.app_name) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ExampleTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colorScheme.background) {
 
-                    var showDateTimeDialog by remember { mutableStateOf(false) }
-                    var showDateDialog by remember { mutableStateOf(false) }
-                    var showTimeDialog by remember { mutableStateOf(false) }
-                    var enabled by remember { mutableStateOf(true) }
-
-//                    DateTimePicker(
-//                        date = LocalDateTime.now(),
-//                        onDateSelected = {
-//                            Log.d("DEBUG", "Selected DateTime: $it")
-//                            showDateTimeDialog = false
-//                        },
-//                        onDialogDismissed = {
-//                            showDateTimeDialog = false
-//                        },
-//                        showDialog = showDateTimeDialog
-//                    )
-//
-//                    DatePicker(
-//                        date = LocalDate.now(),
-//                        onDateSelected = {
-//                            Log.d("DEBUG", "Selected Date: $it")
-//                            showDateDialog = false
-//                        },
-//                        onDialogDismissed = {
-//                            showDateDialog = false
-//                        },
-//                        showDialog = showDateDialog
-//                    )
-//
-//                    TimePicker(
-//                        time = LocalTime.now(),
-//                        onTimeSelected = {
-//                            Log.d("DEBUG", "Selected Time: $it")
-//                            showTimeDialog = false
-//                        },
-//                        onDialogDismissed = {
-//                            showTimeDialog = false
-//                        },
-//                        showDialog = showTimeDialog
-//                    )
-
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.fillMaxSize()
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = "samples"
                     ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.padding(horizontal = 20.dp)
-                        ) {
-//                            Button(onClick = {
-//                                showDateTimeDialog = true
-//                            }) {
-//                                Text(text = "Show DateTime Dialog")
-//                            }
-//
-//                            Button(onClick = {
-//                                showDateDialog = true
-//                            }) {
-//                                Text(text = "Show Date Dialog")
-//                            }
-//
-//                            Button(onClick = {
-//                                showTimeDialog = true
-//                            }) {
-//                                Text(text = "Show Time Dialog")
-//                            }
-
-                            Button(onClick = {
-                                enabled = !enabled
-                            }) {
-                                Text(text = if (enabled) "Disabled" else "Enable")
+                        composable("samples") {
+                            SamplePickerUi {
+                                navController.navigate(it)
                             }
-
-                            var text by remember { mutableStateOf("") }
-                            AnimatedTextField(
-                                enabled = enabled,
-                                leadingIcon = R.drawable.ic_person,
-                                maxCharacters = 12,
-                                onClear = { text = "" },
-                                onValueChange = { text = it },
-                                placeholder = "Placeholder",
-                                text = text
-                            )
+                        }
+                        composable("animated-textfield") {
+                            AnimatedTextFieldUi()
+                        }
+                        composable("datetime-picker") {
+                            DateTimePickerUi()
+                        }
+                        composable("exoplayer") {
+                            ExoplayerUi(datastoreCache)
                         }
                     }
                 }

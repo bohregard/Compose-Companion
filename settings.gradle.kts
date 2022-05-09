@@ -4,7 +4,7 @@ include(
     ":example",
     ":shared",
     ":shared-compose",
-    ":shared-compose-explayer",
+    ":exoplayer-composable",
     ":datetime-picker",
     ":shared-compose-markdown",
     ":animated-textfield"

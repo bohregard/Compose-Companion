@@ -64,8 +64,8 @@ afterEvaluate {
         repositories {
             maven {
                 credentials {
-                    username mavenRepositoryUsername
-                    password mavenRepositoryPassword
+                    username githubUser
+                    password githubToken
                 }
                 name = "github"
                 url = "https://maven.pkg.github.com/bohregard/Shared-Library"

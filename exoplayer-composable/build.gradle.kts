@@ -44,17 +44,17 @@ android {
 publishing {
     publications {
         create<MavenPublication>("release") {
-            artifactId = "shared-compose-exoplayer"
+            artifactId = "exoplayer-composable"
             pom {
-                name.set("Shared Compose Exoplayer Library")
-                description.set("Shared Compose Exoplayer Library")
+                name.set("Compose Exoplayer View")
+                description.set("Compose Exoplayer View")
             }
         }
         create<MavenPublication>("debug") {
-            artifactId = "shared-compose-exoplayer"
+            artifactId = "exoplayer-composable"
             pom {
-                name.set("Shared Compose Exoplayer Library")
-                description.set("Shared Compose Exoplayer Library")
+                name.set("Compose Exoplayer View")
+                description.set("Compose Exoplayer View")
             }
         }
     }

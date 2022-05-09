@@ -1,26 +1,17 @@
-package com.bohregard.shared.compose.exoplayer
+package com.bohregard.exoplayercomposable
 
 import android.util.Log
 import android.view.WindowManager
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.bohregard.shared.compose.exoplayer.extension.hasAudioTrack
+import com.bohregard.exoplayercomposable.extension.hasAudioTrack
 import com.bohregard.shared.extension.findActivity
-import com.bohregard.shared.extension.toHourMinuteSecondString
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.Player.REPEAT_MODE_ALL
 import com.google.android.exoplayer2.Player.STATE_READY
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -31,35 +22,36 @@ import com.google.android.exoplayer2.ui.StyledPlayerView
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.format.DateTimeFormatter
 
-
-private val TAG = "WaveCard"
 
 /**
- * ExoPlayerCompose: given a dashUrl and a ratio, will build and load a Surface view with the
- * given dash playlist.
+ * ExoPlayerDashComposable: given a dashUrl, will build and load a Surface view with the given dash
+ * playlist.
  *
- * @param dashUrl the url to play
- * @param ratio the ratio bound for the surface view
+ * @param modifier The modifier that controls the bounding area of the BaseComposable
+ * @param dashUrl The url to the dash playlist (ending in mpd generally)
+ * @param config An [ExoPlayerConfig] object to control various properties of the player
+ * @param cache A [DataStoreCache] object for cache control
+ * @param onError A callback function for errors to display a custom UI. If no UI is provided, a default UI will be provided.
+ * @param controls A callback function for controls with references to the player, volume status, timeline, duration, and playing status.
+ * @return ExoPlayer
  */
 @Composable
-fun ExoPlayerDashCompose(
+fun ExoPlayerDashComposable(
     modifier: Modifier = Modifier,
     dashUrl: String,
-    onError: (@Composable () -> Unit)? = null,
-    autoPlay: Boolean = false,
+    config: ExoPlayerConfig,
     cache: DataStoreCache = LocalDataStoreCache.current,
-    controls: (@Composable (
-        player: SimpleExoPlayer,
+    onError: (@Composable () -> Unit)? = null,
+    controls: (@Composable BoxScope.(
+        player: ExoPlayer,
         hasVolume: Boolean,
         timeline: Long,
         duration: Long,
         isPlaying: Boolean
     ) -> Unit)? = null,
-): SimpleExoPlayer {
-    val tmp = SimpleExoPlayer.Builder(LocalContext.current).build()
+): ExoPlayer {
+    val tmp = ExoPlayer.Builder(LocalContext.current).build()
     val player by remember { mutableStateOf(tmp) }
 
     val mediaSource: MediaSource = DashMediaSource.Factory(cache)
@@ -67,19 +59,16 @@ fun ExoPlayerDashCompose(
     player.setMediaSource(mediaSource)
     player.prepare()
 
-    BaseExoPlayer(
+    BaseExoPlayerComposable(
         modifier = modifier,
         player = player,
+        config = config,
         onError = onError,
-        autoPlay = autoPlay,
         controls = controls
     )
 
-    Log.d(TAG, "Player Key: $dashUrl")
-
     DisposableEffect(key1 = dashUrl) {
         onDispose {
-            Log.d(TAG, "Player Release $dashUrl")
             player.release()
         }
     }
@@ -87,28 +76,32 @@ fun ExoPlayerDashCompose(
 }
 
 /**
- * ExoPlayerCompose: given a dashUrl and a ratio, will build and load a Surface view with the
- * given dash playlist.
+ * ExoPlayerCompose: given a MP4 url, will build and load a Surface view
  *
- * @param dashUrl the url to play
- * @param ratio the ratio bound for the surface view
+ * @param modifier The modifier that controls the bounding area of the BaseComposable
+ * @param mp4Url the url to play
+ * @param config An [ExoPlayerConfig] object to control various properties of the player
+ * @param cache A [DataStoreCache] object for cache control
+ * @param onError A callback function for errors to display a custom UI. If no UI is provided, a default UI will be provided.
+ * @param controls A callback function for controls with references to the player, volume status, timeline, duration, and playing status.
+ * @return ExoPlayer
  */
 @Composable
-fun ExoPlayerMp4Compose(
+fun ExoPlayerMp4Composable(
     modifier: Modifier = Modifier,
     mp4Url: String,
-    onError: (@Composable () -> Unit)? = null,
-    autoPlay: Boolean = false,
+    config: ExoPlayerConfig,
     cache: DataStoreCache = LocalDataStoreCache.current,
-    controls: (@Composable (
-        player: SimpleExoPlayer,
+    onError: (@Composable () -> Unit)? = null,
+    controls: (@Composable BoxScope.(
+        player: ExoPlayer,
         hasVolume: Boolean,
         timeline: Long,
         duration: Long,
         isPlaying: Boolean
     ) -> Unit)? = null,
-): SimpleExoPlayer {
-    val tmp = SimpleExoPlayer.Builder(LocalContext.current).build()
+): ExoPlayer {
+    val tmp = ExoPlayer.Builder(LocalContext.current).build()
     val player by remember { mutableStateOf(tmp) }
 
     val mediaSource = ProgressiveMediaSource.Factory(cache)
@@ -116,31 +109,42 @@ fun ExoPlayerMp4Compose(
     player.setMediaSource(mediaSource)
     player.prepare()
 
-    BaseExoPlayer(
+    BaseExoPlayerComposable(
         modifier = modifier,
         player = player,
+        config = config,
         onError = onError,
-        autoPlay = autoPlay,
         controls = controls
     )
 
     DisposableEffect(key1 = mp4Url) {
         onDispose {
-            Log.d(TAG, "Player Release: $mp4Url")
             player.release()
         }
     }
     return player
 }
 
+/**
+ * Default wiring for the ExoPlayer view. Has the ability to keep the screen on if configured in the
+ * [ExoPlayerConfig] object.
+ *
+ * @see ExoPlayerConfig
+ * @see ExoPlayer
+ * @param modifier The modifier that controls the bounding area of the BaseComposable
+ * @param player The [ExoPlayer] object to play
+ * @param config An [ExoPlayerConfig] object to control various properties of the player
+ * @param onError A callback function for errors to display a custom UI. If no UI is provided, a default UI will be provided.
+ * @param controls A callback function for controls with references to the player, volume status, timeline, duration, and playing status.
+ */
 @Composable
-fun BaseExoPlayer(
+fun BaseExoPlayerComposable(
     modifier: Modifier = Modifier,
-    player: SimpleExoPlayer,
+    player: ExoPlayer,
+    config: ExoPlayerConfig,
     onError: (@Composable () -> Unit)?,
-    autoPlay: Boolean,
-    controls: (@Composable (
-        player: SimpleExoPlayer,
+    controls: (@Composable BoxScope.(
+        player: ExoPlayer,
         hasVolume: Boolean,
         timeline: Long,
         duration: Long,
@@ -150,7 +154,7 @@ fun BaseExoPlayer(
     var isError by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     if (!isError) {
-        Column(
+        Box(
             modifier = modifier.background(color = Color.Black)
         ) {
             var timeline by remember { mutableStateOf(0L) }
@@ -158,10 +162,7 @@ fun BaseExoPlayer(
             var isPlaying by remember { mutableStateOf(false) }
             var hasVolume by remember { mutableStateOf(false) }
 
-            val context = LocalContext.current
-            DisposableEffect(Unit) {
-                val window = context.findActivity()?.window
-                window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            DisposableEffect("timelineTracker") {
                 scope.launch {
                     while (true) {
                         timeline = player.currentPosition
@@ -169,8 +170,20 @@ fun BaseExoPlayer(
                     }
                 }
                 onDispose {
-                    window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                     scope.cancel()
+                }
+            }
+
+            if (config.keepScreenOn) {
+                val context = LocalContext.current
+
+                DisposableEffect("keepScreenOn") {
+                    val window = context.findActivity()?.window
+                    window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                    onDispose {
+                        window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                        scope.cancel()
+                    }
                 }
             }
             AndroidView(
@@ -178,7 +191,7 @@ fun BaseExoPlayer(
                     val playerView = StyledPlayerView(it)
                     playerView.player = player
                     playerView.setShowBuffering(StyledPlayerView.SHOW_BUFFERING_WHEN_PLAYING)
-                    player.repeatMode = REPEAT_MODE_ALL
+                    player.repeatMode = config.repeatMode
                     player.addListener(object : Player.Listener {
 
                         override fun onTracksChanged(
@@ -208,24 +221,24 @@ fun BaseExoPlayer(
                         }
                     })
 
-                    player.volume = 0f
-                    player.playWhenReady = autoPlay
-                    playerView.controllerHideOnTouch = false
-                    playerView.controllerAutoShow = false
-                    playerView.controllerShowTimeoutMs = 0
+                    player.volume = config.volume
+                    player.playWhenReady = config.autoPlay
+                    playerView.controllerHideOnTouch = config.showController
+                    playerView.controllerAutoShow = config.showController
+                    playerView.controllerShowTimeoutMs = config.controllerTimeOutMs
                     playerView.showController()
                     playerView
-                },
-                modifier = Modifier
-                    .weight(1f)
+                }
             )
-            controls?.invoke(
-                player,
-                hasVolume,
-                timeline,
-                duration,
-                isPlaying
-            )
+            if (controls != null) {
+                controls(
+                    player = player,
+                    hasVolume = hasVolume,
+                    timeline = timeline,
+                    duration = duration,
+                    isPlaying = isPlaying
+                )
+            }
         }
     } else {
         onError?.invoke()
