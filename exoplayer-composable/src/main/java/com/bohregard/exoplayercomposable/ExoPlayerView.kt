@@ -1,17 +1,22 @@
 package com.bohregard.exoplayercomposable
 
-import android.util.Log
 import android.view.WindowManager
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import com.bohregard.exoplayercomposable.extension.hasAudioTrack
+import com.bohregard.shared.compose.modifier.zoomable
 import com.bohregard.shared.extension.findActivity
-import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.PlaybackException
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.STATE_READY
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -51,8 +56,8 @@ fun ExoPlayerDashComposable(
         isPlaying: Boolean
     ) -> Unit)? = null,
 ): ExoPlayer {
-    val tmp = ExoPlayer.Builder(LocalContext.current).build()
-    val player by remember { mutableStateOf(tmp) }
+    val context = LocalContext.current
+    val player by remember { mutableStateOf(ExoPlayer.Builder(context).build()) }
 
     val mediaSource: MediaSource = DashMediaSource.Factory(cache)
         .createMediaSource(MediaItem.fromUri(dashUrl))
@@ -101,8 +106,8 @@ fun ExoPlayerMp4Composable(
         isPlaying: Boolean
     ) -> Unit)? = null,
 ): ExoPlayer {
-    val tmp = ExoPlayer.Builder(LocalContext.current).build()
-    val player by remember { mutableStateOf(tmp) }
+    val context = LocalContext.current
+    val player by remember { mutableStateOf(ExoPlayer.Builder(context).build()) }
 
     val mediaSource = ProgressiveMediaSource.Factory(cache)
         .createMediaSource(MediaItem.fromUri(mp4Url))
@@ -156,6 +161,7 @@ fun BaseExoPlayerComposable(
     if (!isError) {
         Box(
             modifier = modifier.background(color = Color.Black)
+                .clipToBounds()
         ) {
             var timeline by remember { mutableStateOf(0L) }
             var duration by remember { mutableStateOf(0L) }
@@ -186,6 +192,13 @@ fun BaseExoPlayerComposable(
                     }
                 }
             }
+
+            val zoomable = if (config.zoomable) {
+                Modifier.zoomable()
+            } else {
+                Modifier
+            }
+
             AndroidView(
                 factory = {
                     val playerView = StyledPlayerView(it)
@@ -228,7 +241,9 @@ fun BaseExoPlayerComposable(
                     playerView.controllerShowTimeoutMs = config.controllerTimeOutMs
                     playerView.showController()
                     playerView
-                }
+                },
+                modifier = Modifier
+                    .then(zoomable)
             )
             if (controls != null) {
                 controls(

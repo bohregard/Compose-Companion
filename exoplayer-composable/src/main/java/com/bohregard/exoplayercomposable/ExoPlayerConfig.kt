@@ -23,7 +23,8 @@ data class ExoPlayerConfig(
     val repeatMode: Int,
     val showController: Boolean,
     @FloatRange(from = 0.0, to = 1.0)
-    val volume: Float
+    val volume: Float,
+    val zoomable: Boolean,
 ) {
     companion object {
         val DEFAULT = ExoPlayerConfig(
@@ -32,7 +33,8 @@ data class ExoPlayerConfig(
             keepScreenOn = false,
             repeatMode = REPEAT_MODE_OFF,
             showController = true,
-            volume = 1f
+            volume = 1f,
+            zoomable = false
         )
     }
 }

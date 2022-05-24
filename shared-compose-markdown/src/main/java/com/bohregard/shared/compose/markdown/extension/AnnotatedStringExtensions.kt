@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import com.bohregard.shared.compose.markdown.LocalMarkdownBoldStyle
 import com.bohregard.shared.compose.markdown.LocalMarkdownTextStyle
@@ -13,7 +12,7 @@ import com.bohregard.shared.compose.markdown.components.MDImage
 import org.commonmark.node.*
 
 @Composable
-fun AnnotatedString.Builder.AppendMarkdownChildren(parent: Node) {
+internal fun AnnotatedString.Builder.AppendMarkdownChildren(parent: Node) {
     val textStyle = LocalMarkdownTextStyle.current
     val boldStyle = LocalMarkdownBoldStyle.current
     var child = parent.firstChild

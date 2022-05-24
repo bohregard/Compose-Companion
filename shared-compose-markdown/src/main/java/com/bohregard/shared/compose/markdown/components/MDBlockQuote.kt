@@ -16,7 +16,7 @@ import com.bohregard.shared.compose.markdown.extension.AppendMarkdownChildren
 import org.commonmark.node.BlockQuote
 
 @Composable
-fun MDBlockQuote(blockQuote: BlockQuote) {
+internal fun MDBlockQuote(blockQuote: BlockQuote) {
     val color = MaterialTheme.colors.onBackground
     Box(modifier = Modifier
         .drawBehind {

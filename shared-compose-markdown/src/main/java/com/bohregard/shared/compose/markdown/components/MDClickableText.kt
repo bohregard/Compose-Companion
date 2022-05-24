@@ -8,7 +8,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 
 @Composable
-fun MDClickableText(text: AnnotatedString, modifier: Modifier = Modifier) {
+internal fun MDClickableText(text: AnnotatedString, modifier: Modifier = Modifier) {
     val uri = LocalUriHandler.current
     ClickableText(
         modifier = modifier,

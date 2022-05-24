@@ -104,6 +104,12 @@ When the composable is disposed, the player is released. However if you use the 
 
 An XML layout can be used as needed. Follow the [instructions](https://exoplayer.dev/ui-components.html) on the official documentation. A composable can also be used if the `controls` field is passed in. This uses a `BoxScope` and is overlayed on the component. See the example below for more details on `controls`.
 
+### Zoom/Pan
+
+Zooming and Panning is supported if it's needed. To enabled, set `zoomable = true` on the `ExoPlayerConfig` object. The minimum zoom is 1f and the maximum zoom is 6f. The panning is bounded and clipped by the box it's contained in.
+
+**Note**: If you have controls defined (via compose or XML), they will take precedent over the drag/pan gestures. However the controls can be placed below the ExoPlayer view as necessary.
+
 ### Example code:
 
 ```groovy
@@ -153,6 +159,38 @@ fun ExoplayerUi(dataStoreCache: DataStoreCache) {
                 }
             }
         )
+    }
+}
+```
+
+## Zoomable
+
+A modifier to enable zooming, panning, and rotation on an item. It has a default zoom min of 1f and a max of 6f.
+
+- [ ] Allow zoom min/max configuration
+- [ ] Allow Boundary enable/disable (currently enabled by default)
+
+### Example Code
+
+```kotlin
+@Composable
+fun ZoomModifier() {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(400.dp)
+            .background(color = Color.Red)
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .zoomable(enableRotation = true)
+                .size(200.dp)
+                .background(color = Color.Blue)
+        ) {
+            Text("Testing")
+        }
     }
 }
 ```

@@ -27,10 +27,10 @@ dependencyResolutionManagement {
             library("moshi", "com.squareup.moshi:moshi:1.13.0")
         }
         create("libs") {
-            version("kotlin", "1.6.10")
-            version("compose-version", "1.2.0-alpha06") // update buildSrc as well
+            version("kotlin", "1.6.20")
+            version("compose-version", "1.2.0-alpha08") // update buildSrc as well
             version("material", "1.6.0-beta01")
-            version("material3", "1.0.0-alpha08")
+            version("material3", "1.0.0-alpha10")
 
             library("stdlib", "org.jetbrains.kotlin", "kotlin-stdlib").versionRef("kotlin")
             library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").versionRef("kotlin")
@@ -52,7 +52,7 @@ dependencyResolutionManagement {
             library("lifecycle", "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-alpha05")
 
             library("exoplayer", "com.google.android.exoplayer:exoplayer:2.17.1")
-            library("coil", "io.coil-kt:coil-compose:2.0.0-rc02")
+            library("coil", "io.coil-kt:coil-compose:2.0.0-rc03")
             bundle(
                 "compose",
                 listOf(

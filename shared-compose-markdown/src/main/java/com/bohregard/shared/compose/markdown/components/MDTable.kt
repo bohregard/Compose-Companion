@@ -15,7 +15,7 @@ import org.commonmark.ext.gfm.tables.TableRow
 import org.commonmark.node.Node
 
 @Composable
-fun MDTable(tableBlock: Node) {
+internal fun MDTable(tableBlock: Node) {
     var child = tableBlock.firstChild
     while (child != null) {
         when (child) {
@@ -31,7 +31,7 @@ fun MDTable(tableBlock: Node) {
 }
 
 @Composable
-fun MDTableHead(tableHead: TableHead) {
+internal fun MDTableHead(tableHead: TableHead) {
     var child = tableHead.firstChild
     while (child != null) {
         when (child) {

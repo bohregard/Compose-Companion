@@ -7,7 +7,7 @@ import com.bohregard.shared.compose.markdown.extension.AppendMarkdownChildren
 import org.commonmark.node.Paragraph
 
 @Composable
-fun MDParagraph(paragraph: Paragraph) {
+internal fun MDParagraph(paragraph: Paragraph) {
     Box {
         val text = buildAnnotatedString {
             AppendMarkdownChildren(paragraph)

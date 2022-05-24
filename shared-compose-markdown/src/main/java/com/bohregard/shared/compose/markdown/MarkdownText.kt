@@ -16,6 +16,6 @@ fun MarkdownText(markdown: String) {
 }
 
 @Composable
-fun MDDocument(document: Document) {
+internal fun MDDocument(document: Document) {
     MDBlockChildren(document)
 }

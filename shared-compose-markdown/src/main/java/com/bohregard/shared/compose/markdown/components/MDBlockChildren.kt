@@ -5,7 +5,7 @@ import org.commonmark.ext.gfm.tables.TableBlock
 import org.commonmark.node.*
 
 @Composable
-fun MDBlockChildren(parent: Node) {
+internal fun MDBlockChildren(parent: Node) {
     var child = parent.firstChild
     while (child != null) {
         when (child) {

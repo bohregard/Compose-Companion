@@ -20,12 +20,12 @@ import com.bohregard.exoplayercomposable.ExoPlayerDashComposable
 import com.bohregard.exoplayercomposable.LocalDataStoreCache
 
 @Composable
-fun ExoplayerUi(dataStoreCache: DataStoreCache) {
+fun ExoplayerUi(dataStoreCache: DataStoreCache, config: ExoPlayerConfig = ExoPlayerConfig.DEFAULT) {
     CompositionLocalProvider(
         LocalDataStoreCache provides dataStoreCache
     ) {
         ExoPlayerDashComposable(
-            config = ExoPlayerConfig.DEFAULT,
+            config = config,
             modifier = Modifier
                 .aspectRatio(16 / 9f)
                 .fillMaxWidth(),

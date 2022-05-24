@@ -63,6 +63,7 @@ publishing {
 dependencies {
 
     implementation(project(":shared"))
+    implementation(project(":shared-compose"))
     implementation(libs.bundles.core)
     implementation(libs.bundles.compose)
 

@@ -9,7 +9,7 @@ import com.bohregard.shared.compose.markdown.extension.AppendMarkdownChildren
 import org.commonmark.node.Heading
 
 @Composable
-fun MDHeading(heading: Heading) {
+internal fun MDHeading(heading: Heading) {
     val style = when (heading.level) {
         1 -> MaterialTheme.typography.h1
         2 -> MaterialTheme.typography.h2

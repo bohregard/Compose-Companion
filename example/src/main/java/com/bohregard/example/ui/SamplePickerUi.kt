@@ -38,8 +38,24 @@ fun SamplePickerUi(
         )
         Divider()
         SamplePickerRowUi(
-            text = "ExoPlayer",
+            text = "ExoPlayer Composable",
             route = "exoplayer",
+            onRowClicked = {
+                onRowClicked(it)
+            }
+        )
+        Divider()
+        SamplePickerRowUi(
+            text = "Zoomable ExoPlayer Composable",
+            route = "zoomable-exoplayer",
+            onRowClicked = {
+                onRowClicked(it)
+            }
+        )
+        Divider()
+        SamplePickerRowUi(
+            text = "Zoomable Modifier",
+            route = "zoomable",
             onRowClicked = {
                 onRowClicked(it)
             }
