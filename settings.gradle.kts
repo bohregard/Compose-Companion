@@ -7,7 +7,8 @@ include(
     ":exoplayer-composable",
     ":datetime-picker",
     ":shared-compose-markdown",
-    ":animated-textfield"
+    ":animated-textfield",
+    ":gallery"
 )
 
 dependencyResolutionManagement {

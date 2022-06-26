@@ -61,6 +61,22 @@ fun SamplePickerUi(
             }
         )
         Divider()
+        SamplePickerRowUi(
+            text = "Gallery",
+            route = "gallery",
+            onRowClicked = {
+                onRowClicked(it)
+            }
+        )
+        Divider()
+        SamplePickerRowUi(
+            text = "Gallery Custom Indicator",
+            route = "gallery-custom",
+            onRowClicked = {
+                onRowClicked(it)
+            }
+        )
+        Divider()
     }
 }
 

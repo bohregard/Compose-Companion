@@ -1,27 +1,25 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("kotlin-android")
+    id("maven-publish")
 }
 
-val library_version: String by project
+apply(from = "../maven-publish-helper.gradle")
 
 android {
+    namespace = "com.bohregard.gallery"
     compileSdk = Versions.compileSdk
 
     defaultConfig {
-        applicationId = "com.bohregard.example"
         minSdk = Versions.minSdk
         targetSdk = Versions.compileSdk
-        versionCode = 1
-        versionName = "1.0-${library_version}"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "LIBRARY_VERSION", "\"${library_version}\"")
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -45,24 +43,33 @@ android {
     }
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            artifactId = "gallery"
+            pom {
+                name.set("Compose Gallery View")
+                description.set("Compose Gallery View")
+            }
+        }
+        create<MavenPublication>("debug") {
+            artifactId = "gallery"
+            pom {
+                name.set("Compose Gallery View")
+                description.set("Compose Gallery View")
+            }
+        }
+    }
+}
+
 dependencies {
-
-    implementation(project(":shared"))
-    implementation(project(":shared-compose"))
-    implementation(project(":datetime-picker"))
-    implementation(project(":exoplayer-composable"))
-    implementation(project(":animated-textfield"))
-    implementation(project(":gallery"))
     implementation(libs.bundles.core)
-
     implementation(libs.bundles.compose)
-    implementation(libs.compose.activity)
-    implementation(libs.exoplayer)
+    implementation(libs.coil)
+    implementation(accompanist.bundles.pager)
 
     testImplementation(testLibraries.bundles.core)
     androidTestImplementation(instrumentation.bundles.core)
+    debugImplementation(libs.bundles.compose.debug)
 
-    val nav_version = "2.4.2"
-
-    implementation("androidx.navigation:navigation-compose:$nav_version")
 }

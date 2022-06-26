@@ -60,6 +60,12 @@ class MainActivity : ComponentActivity() {
                             composable("zoomable") {
                                 ZoomModifier()
                             }
+                            composable("gallery") {
+                                GalleryUi()
+                            }
+                            composable("gallery-custom") {
+                                GalleryCustomIndicatorUi()
+                            }
                         }
                         Text(
                             modifier = Modifier.align(Alignment.BottomEnd),

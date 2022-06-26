@@ -55,14 +55,18 @@ fun ExoPlayerDashComposable(
         duration: Long,
         isPlaying: Boolean
     ) -> Unit)? = null,
-): ExoPlayer {
+) {
     val context = LocalContext.current
-    val player by remember { mutableStateOf(ExoPlayer.Builder(context).build()) }
+    val player by remember(dashUrl) { mutableStateOf(ExoPlayer.Builder(context).build()) }
 
-    val mediaSource: MediaSource = DashMediaSource.Factory(cache)
-        .createMediaSource(MediaItem.fromUri(dashUrl))
-    player.setMediaSource(mediaSource)
-    player.prepare()
+    val mediaSource: MediaSource by remember(dashUrl) {
+        mutableStateOf(DashMediaSource.Factory(cache).createMediaSource(MediaItem.fromUri(dashUrl)))
+    }
+
+    LaunchedEffect(key1 = dashUrl, block = {
+        player.setMediaSource(mediaSource)
+        player.prepare()
+    })
 
     BaseExoPlayerComposable(
         modifier = modifier,
@@ -77,7 +81,6 @@ fun ExoPlayerDashComposable(
             player.release()
         }
     }
-    return player
 }
 
 /**
@@ -105,14 +108,21 @@ fun ExoPlayerMp4Composable(
         duration: Long,
         isPlaying: Boolean
     ) -> Unit)? = null,
-): ExoPlayer {
+) {
+    println("ANT_TEST: MP4URL - $mp4Url")
     val context = LocalContext.current
-    val player by remember { mutableStateOf(ExoPlayer.Builder(context).build()) }
+    val player by remember(mp4Url) { mutableStateOf(ExoPlayer.Builder(context).build()) }
 
-    val mediaSource = ProgressiveMediaSource.Factory(cache)
-        .createMediaSource(MediaItem.fromUri(mp4Url))
-    player.setMediaSource(mediaSource)
-    player.prepare()
+    val mediaSource by remember(mp4Url) {
+        mutableStateOf(
+            ProgressiveMediaSource.Factory(cache).createMediaSource(MediaItem.fromUri(mp4Url))
+        )
+    }
+
+    LaunchedEffect(key1 = mp4Url, block = {
+        player.setMediaSource(mediaSource)
+        player.prepare()
+    })
 
     BaseExoPlayerComposable(
         modifier = modifier,
@@ -127,7 +137,6 @@ fun ExoPlayerMp4Composable(
             player.release()
         }
     }
-    return player
 }
 
 /**
@@ -160,7 +169,8 @@ fun BaseExoPlayerComposable(
     val scope = rememberCoroutineScope()
     if (!isError) {
         Box(
-            modifier = modifier.background(color = Color.Black)
+            modifier = modifier
+                .background(color = Color.Black)
                 .clipToBounds()
         ) {
             var timeline by remember { mutableStateOf(0L) }
