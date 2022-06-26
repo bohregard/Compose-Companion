@@ -3,18 +3,14 @@ package com.bohregard.shared.compose.markdown.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.buildAnnotatedString
-import com.bohregard.shared.compose.markdown.LocalMarkdownTextStyle
 import com.bohregard.shared.compose.markdown.extension.AppendMarkdownChildren
-import org.commonmark.node.Paragraph
+import org.commonmark.node.BulletList
 
 @Composable
-internal fun MDParagraph(paragraph: Paragraph) {
-    val textStyle = LocalMarkdownTextStyle.current
+internal fun MDBullet(bullet: BulletList) {
     Box {
         val text = buildAnnotatedString {
-            pushStyle(textStyle)
-            AppendMarkdownChildren(paragraph)
-            pop()
+            AppendMarkdownChildren(bullet)
         }
         MDClickableText(text = text)
     }

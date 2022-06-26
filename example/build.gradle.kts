@@ -49,6 +49,7 @@ dependencies {
 
     implementation(project(":shared"))
     implementation(project(":shared-compose"))
+    implementation(project(":shared-compose-markdown"))
     implementation(project(":datetime-picker"))
     implementation(project(":exoplayer-composable"))
     implementation(project(":animated-textfield"))

@@ -45,6 +45,9 @@ class MainActivity : ComponentActivity() {
                             composable("animated-textfield") {
                                 AnimatedTextFieldUi()
                             }
+                            composable("markdown") {
+                                MarkdownUi()
+                            }
                             composable("datetime-picker") {
                                 DateTimePickerUi()
                             }
