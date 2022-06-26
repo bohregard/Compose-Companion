@@ -12,12 +12,12 @@ include(
 
 dependencyResolutionManagement {
     versionCatalogs {
-        create("testing") {
+        create("testLibraries") {
             library("junit", "junit:junit:4.13.2")
             bundle("core", listOf("junit"))
         }
         create("instrumentation") {
-            version("compose-version", "1.2.0-alpha06")
+            version("compose-version", "1.2.0-rc02")
             library("junit", "androidx.test.ext:junit:1.1.4-alpha05")
             library("espresso", "androidx.test.espresso:espresso-core:3.5.0-alpha05")
             library("compose-testing", "androidx.compose.ui", "ui-test-junit4").versionRef("compose_version")
@@ -26,16 +26,22 @@ dependencyResolutionManagement {
         create("square") {
             library("moshi", "com.squareup.moshi:moshi:1.13.0")
         }
+        create("accompanist") {
+            version("accompanist", "0.24.12-rc")
+            library("horizontalPager", "com.google.accompanist", "accompanist-pager").versionRef("accompanist")
+            library("horizontalIndicators", "com.google.accompanist", "accompanist-pager-indicators").versionRef("accompanist")
+            bundle("pager", listOf("horizontalPager", "horizontalIndicators"))
+        }
         create("libs") {
-            version("kotlin", "1.6.20")
-            version("compose-version", "1.2.0-alpha08") // update buildSrc as well
+            version("kotlin", "1.6.21")
+            version("compose-version", "1.2.0-rc02") // update buildSrc as well
             version("material", "1.6.0-beta01")
-            version("material3", "1.0.0-alpha10")
+            version("material3", "1.0.0-alpha13")
 
             library("stdlib", "org.jetbrains.kotlin", "kotlin-stdlib").versionRef("kotlin")
             library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").versionRef("kotlin")
             library("appCompat", "androidx.appcompat:appcompat:1.6.0-alpha01")
-            library("core", "androidx.core:core-ktx:1.7.0")
+            library("core", "androidx.core:core-ktx:1.8.0")
             library("material", "com.google.android.material:material:1.6.0-beta01")
 
             bundle("core", listOf("stdlib", "appCompat", "core", "material"))
@@ -52,7 +58,7 @@ dependencyResolutionManagement {
             library("lifecycle", "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-alpha05")
 
             library("exoplayer", "com.google.android.exoplayer:exoplayer:2.17.1")
-            library("coil", "io.coil-kt:coil-compose:2.0.0-rc03")
+            library("coil", "io.coil-kt:coil-compose:2.1.0")
             bundle(
                 "compose",
                 listOf(

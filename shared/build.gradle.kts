@@ -62,6 +62,6 @@ dependencies {
 
     implementation(square.moshi)
 
-    testImplementation(testing.bundles.core)
+    testImplementation(testLibraries.bundles.core)
     androidTestImplementation(instrumentation.bundles.core)
 }

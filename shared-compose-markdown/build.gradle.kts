@@ -68,6 +68,6 @@ dependencies {
 
     implementation(libs.coil)
 
-    testImplementation(testing.bundles.core)
+    testImplementation(testLibraries.bundles.core)
     androidTestImplementation(instrumentation.bundles.core)
 }

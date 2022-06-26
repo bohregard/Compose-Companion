@@ -70,6 +70,6 @@ dependencies {
     // ExoPlayer
     implementation(libs.exoplayer)
 
-    testImplementation(testing.bundles.core)
+    testImplementation(testLibraries.bundles.core)
     androidTestImplementation(instrumentation.bundles.core)
 }

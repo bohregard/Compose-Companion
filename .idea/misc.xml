@@ -28,6 +28,7 @@
         <entry key="example/src/main/java/com/bohregard/example/MainActivity.kt" value="0.625" />
         <entry key="example/src/main/java/com/bohregard/example/ui/SamplePickerUi.kt" value="0.45555555555555555" />
         <entry key="exoplayer/src/main/res/layout/exo_styled_player_control_view.xml" value="0.21099290780141844" />
+        <entry key="gallery/src/main/java/com/bohregard/gallery/GalleryUi.kt" value="0.5009259259259259" />
         <entry key="shared-compose-explayer/src/main/res/drawable/ic_error.xml" value="0.28541666666666665" />
         <entry key="shared-compose-explayer/src/main/res/layout/exo_styled_player_control_view.xml" value="0.4891304347826087" />
         <entry key="shared-compose-explayer/src/main/res/layout/exo_styled_player_controler_view.xml" value="0.45" />

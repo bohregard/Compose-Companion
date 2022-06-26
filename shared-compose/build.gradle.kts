@@ -64,7 +64,7 @@ dependencies {
     implementation(libs.bundles.core)
     implementation(libs.bundles.compose)
 
-    testImplementation(testing.bundles.core)
+    testImplementation(testLibraries.bundles.core)
     androidTestImplementation(instrumentation.bundles.core)
     debugImplementation(libs.bundles.compose.debug)
 }

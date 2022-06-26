@@ -7,7 +7,7 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="Android Studio default JDK" />
+        <option name="gradleJvm" value="Embedded JDK" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/datetime-picker" />
             <option value="$PROJECT_DIR$/example" />
             <option value="$PROJECT_DIR$/exoplayer-composable" />
+            <option value="$PROJECT_DIR$/gallery" />
             <option value="$PROJECT_DIR$/shared" />
             <option value="$PROJECT_DIR$/shared-compose" />
             <option value="$PROJECT_DIR$/shared-compose-markdown" />
