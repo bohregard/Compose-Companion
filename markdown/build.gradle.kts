@@ -1,23 +1,19 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("kotlin-android")
+    id("maven-publish")
 }
 
-val library_version: String by project
+apply(from = "../maven-publish-helper.gradle")
 
 android {
     compileSdk = Versions.compileSdk
 
     defaultConfig {
-        applicationId = "com.bohregard.example"
         minSdk = Versions.minSdk
         targetSdk = Versions.compileSdk
-        versionCode = 1
-        versionName = "1.0-${library_version}"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "LIBRARY_VERSION", "\"${library_version}\"")
     }
 
     buildTypes {
@@ -45,25 +41,34 @@ android {
     }
 }
 
-dependencies {
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            artifactId = "markdown"
+            pom {
+                name.set("Compose Markdown Library")
+                description.set("Compose Markdown Library")
+            }
+        }
+        create<MavenPublication>("debug") {
+            artifactId = "markdown"
+            pom {
+                name.set("Compose Markdown Library")
+                description.set("Compose Markdown Library")
+            }
+        }
+    }
+}
 
-    implementation(project(":shared"))
-    implementation(project(":shared-compose"))
-    implementation(project(":markdown"))
-    implementation(project(":datetime-picker"))
-    implementation(project(":exoplayer-composable"))
-    implementation(project(":animated-textfield"))
-    implementation(project(":gallery"))
+dependencies {
     implementation(libs.bundles.core)
 
     implementation(libs.bundles.compose)
-    implementation(libs.compose.activity)
-    implementation(libs.exoplayer)
+    implementation(libs.bundles.commonMark)
+
+    implementation(libs.coil)
 
     testImplementation(testLibraries.bundles.core)
     androidTestImplementation(instrumentation.bundles.core)
-
-    val nav_version = "2.4.2"
-
-    implementation("androidx.navigation:navigation-compose:$nav_version")
+    androidTestImplementation(instrumentation.bundles.compose)
 }

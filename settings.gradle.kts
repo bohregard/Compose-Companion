@@ -6,7 +6,7 @@ include(
     ":shared-compose",
     ":exoplayer-composable",
     ":datetime-picker",
-    ":shared-compose-markdown",
+    ":markdown",
     ":animated-textfield",
     ":gallery"
 )
