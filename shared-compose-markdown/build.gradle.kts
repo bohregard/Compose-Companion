@@ -70,4 +70,5 @@ dependencies {
 
     testImplementation(testLibraries.bundles.core)
     androidTestImplementation(instrumentation.bundles.core)
+    androidTestImplementation(instrumentation.bundles.compose)
 }

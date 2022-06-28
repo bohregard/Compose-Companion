@@ -5,10 +5,10 @@ import coil.compose.AsyncImage
 import org.commonmark.node.Image
 
 @Composable
-internal fun MDImage(image: Image) {
+internal fun MdImage(image: Image) {
     // Use coil?
     AsyncImage(
-        model = "https://giphy.com/gifs/fXnRObM8Q0RkOmR5nf",
+        model = image.destination,
         contentDescription = null
     )
 }

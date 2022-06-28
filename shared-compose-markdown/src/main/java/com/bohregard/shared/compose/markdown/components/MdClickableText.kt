@@ -9,7 +9,7 @@ import androidx.compose.ui.text.AnnotatedString
 import com.bohregard.shared.compose.markdown.LocalMarkdownConfiguration
 
 @Composable
-internal fun MDClickableText(text: AnnotatedString, modifier: Modifier = Modifier) {
+internal fun MdClickableText(text: AnnotatedString, modifier: Modifier = Modifier) {
     val uri = LocalUriHandler.current
     val config = LocalMarkdownConfiguration.current
     ClickableText(

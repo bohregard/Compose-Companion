@@ -1,19 +1,15 @@
 package com.bohregard.shared.compose.markdown.components
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.buildAnnotatedString
-import com.bohregard.shared.compose.markdown.extension.AppendMarkdownChildren
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.withStyle
+import com.bohregard.shared.compose.markdown.util.TextParser
 import org.commonmark.node.Heading
 
 @Composable
-internal fun MDHeading(heading: Heading) {
+internal fun MdHeading(heading: Heading) {
     val style = when (heading.level) {
-//        1 -> MaterialTheme.typography.displayLarge
-//        2 -> MaterialTheme.typography.displayMedium
-//        3 -> MaterialTheme.typography.displaySmall
         1 -> MaterialTheme.typography.headlineLarge
         2 -> MaterialTheme.typography.headlineMedium
         3 -> MaterialTheme.typography.headlineSmall
@@ -23,10 +19,9 @@ internal fun MDHeading(heading: Heading) {
         else -> MaterialTheme.typography.bodyLarge
     }
 
-    Box {
-        val text = buildAnnotatedString {
-            AppendMarkdownChildren(heading)
-        }
-        Text(text, style = style)
+    val annotatedStringBuilder = AnnotatedString.Builder()
+    annotatedStringBuilder.withStyle(style.toSpanStyle()) {
+        TextParser(node = heading, annotatedStringBuilder = annotatedStringBuilder)
     }
+    MdClickableText(text = annotatedStringBuilder.toAnnotatedString())
 }

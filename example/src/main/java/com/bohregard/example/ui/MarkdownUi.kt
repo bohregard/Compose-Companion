@@ -15,45 +15,79 @@ import com.bohregard.shared.compose.markdown.MarkdownText
 @Composable
 fun MarkdownUi() {
     val markdown = """
-        ### Thematic Break
-        
-        ---
-        
         # Header 1
         ## Header 2
         ### Header 3
         #### Header 4
         ##### Header 5
         ###### Header 6
-        ### Bullet Lists
+        
+        # Thematic Break
+        ---
+
+        # Bullet Lists
         * Item 1
         * Item 2
-        
-        ### Ordered Lists
-              
+        * Lorem **_ipsum_** [dolor][1] sit amet, *consectetur adipiscing elit.* **Nulla vitae tempus nibh.** Pellentesque congue massa purus, a pretium urna dapibus quis.
+
+        # Ordered Lists
+
         1. Item 1
         2. Item 2
         3. Item 3
-        
-        ### Ordered Lists
-        
+
+        # Ordered Lists
+
         4. Item 4
         5. Item 5
         6. Item 6
         
-        ### Paragraph
+        # Paragraph
 
-        Lorem **_ipsum_** dolor sit amet, *consectetur adipiscing elit.* **Nulla vitae tempus nibh.** Pellentesque congue massa purus, a pretium urna dapibus quis.
+        Lorem **_ipsum_** [dolor][1] sit amet, *consectetur adipiscing elit.* **Nulla vitae tempus nibh.** Pellentesque congue massa purus, a pretium urna dapibus quis.
         
-        ### Block Quotes
+        [1]: <https://en.wikipedia.org/wiki/Hobbit#Lifestyle> "Hobbit lifestyles"
         
+        # Links
+        
+        Links: [Duck Duck Go](https://duckduckgo.com).
+        
+        Tooltip Link: [Duck Duck Go](https://duckduckgo.com "The best search engine for privacy")
+        
+        <https://www.markdownguide.org>
+        
+        <fake@example.com>
+        
+        # Images
+        
+        ![Place Kitten](http://placekitten.com/200/300)
+        
+        # Code
+
+        Inline code in a paragraph `inline`.
+
+        ```
+        import x.y.z
+        
+        private fun VariablesAreNasty() {
+            Doing the thing
+        }
+        ```
+
+        # Block Quotes
+        
+        > Sentence One **BOLD One**
+        >> Sentence Two _**Bold Italic?**_
+        >
+        >
         > Maecenas maximus euismod nisl vehicula rhoncus.
         > **Vivamus accumsan** neque ac ex laoreet lobortis.
         >
+        > Test
         >> Maecenas maximus euismod nisl vehicula rhoncus.
         >> **Vivamus accumsan** neque ac ex laoreet lobortis.
-        
-        Nunc in posuere eros, ut fermentum turpis. Sed sit amet odio rhoncus dolor interdum blandit et sed leo. Quisque ac magna quis libero dictum hendrerit mollis in quam. Suspendisse et turpis odio. Aenean non ultricies urna. Donec euismod, arcu sit amet pretium auctor, dui lectus venenatis est, vel accumsan sem arcu quis nibh.
+        >
+        > Nunc in posuere eros, ut fermentum turpis.
     """.trimIndent()
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState())

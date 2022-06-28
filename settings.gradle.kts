@@ -21,8 +21,10 @@ dependencyResolutionManagement {
             version("compose-version", "1.2.0-rc02")
             library("junit", "androidx.test.ext:junit:1.1.4-alpha05")
             library("espresso", "androidx.test.espresso:espresso-core:3.5.0-alpha05")
-            library("compose-testing", "androidx.compose.ui", "ui-test-junit4").versionRef("compose_version")
+            library("composeUiJunit", "androidx.compose.ui", "ui-test-junit4").versionRef("compose_version")
+            library("composeUiManifest", "androidx.compose.ui", "ui-test-manifest").versionRef("compose_version")
             bundle("core", listOf("junit", "espresso"))
+            bundle("compose", listOf("composeUiJunit", "composeUiManifest"))
         }
         create("square") {
             library("moshi", "com.squareup.moshi:moshi:1.13.0")
