@@ -13,6 +13,8 @@ repo_name: bohregard/Compose-Companion
 plugins:
   - search
 markdown_extensions:
+  - admonition
+  - pymdownx.details
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
