@@ -1,15 +1,18 @@
 package com.bohregard.gallery
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.bohregard.gallery.model.BaseGalleryItem
-import com.bohregard.gallery.model.Mp4Video
 import com.bohregard.gallery.model.ResourceImage
+import com.bohregard.gallery.model.VideoItem
 import com.bohregard.gallery.model.WebImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -21,8 +24,11 @@ import com.google.accompanist.pager.rememberPagerState
 fun Gallery(
     modifier: Modifier = Modifier,
     items: List<BaseGalleryItem>,
+    contentScale: ContentScale = ContentScale.Fit,
     customIndicator: (@Composable BoxScope.(page: Int) -> Unit)? = null,
-    onMp4VideoLayout: @Composable (Mp4Video) -> Unit = {}
+    onVideoLayout: @Composable (VideoItem) -> Unit = {},
+    onCustomLayout: (@Composable (BaseGalleryItem) -> Unit)? = null,
+
 ) {
     val pagerState = rememberPagerState()
 
@@ -33,7 +39,8 @@ fun Gallery(
     println("Smallest Aspect: $largestAspectRatio")
 
     Box(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .aspectRatio(largestAspectRatio)
     ) {
         HorizontalPager(
@@ -50,6 +57,7 @@ fun Gallery(
                 when(item) {
                     is WebImage -> {
                         AsyncImage(
+                            contentScale = contentScale,
                             model = item.url,
                             modifier = Modifier
                                 .align(Alignment.Center)
@@ -58,8 +66,19 @@ fun Gallery(
                             contentDescription = null
                         )
                     }
-                    is ResourceImage -> {}
-                    is Mp4Video -> onMp4VideoLayout(item)
+                    is ResourceImage -> {
+                        Image(
+                            contentScale = contentScale,
+                            painter = painterResource(id = item.resource),
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .fillMaxWidth()
+                                .aspectRatio(item.width / item.height.toFloat()),
+                            contentDescription = null
+                        )
+                    }
+                    is VideoItem -> onVideoLayout(item)
+                    else -> onCustomLayout?.invoke(item)
                 }
 
                 customIndicator?.invoke(this, page)

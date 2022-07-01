@@ -20,7 +20,7 @@ data class ResourceImage(
     @DrawableRes val resource: Int
 ): BaseGalleryItem()
 
-data class Mp4Video(
+data class VideoItem(
     override val height: Int,
     override val width: Int,
     val url: String
