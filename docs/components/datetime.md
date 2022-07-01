@@ -6,7 +6,7 @@ Returns a `LocalDateTime` object which can be converted to `Instant` if a UTC ti
 <img alt="Date Picker detail" src="/img/DatePicker.png" width="200"/>
 <img alt="Time Picker detail" src="/img/TimePicker.png" width="200"/>
 
-## Example code:
+## Usage
 
 === "Kotlin"
 
