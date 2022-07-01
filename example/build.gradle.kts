@@ -3,8 +3,6 @@ plugins {
     id("kotlin-android")
 }
 
-val library_version: String by project
-
 android {
     compileSdk = Versions.compileSdk
 
@@ -13,11 +11,11 @@ android {
         minSdk = Versions.minSdk
         targetSdk = Versions.compileSdk
         versionCode = 1
-        versionName = "1.0-${library_version}"
+        versionName = "1.0-${Versions.library}"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "LIBRARY_VERSION", "\"${library_version}\"")
+        buildConfigField("String", "LIBRARY_VERSION", "\"${Versions.library}\"")
     }
 
     buildTypes {

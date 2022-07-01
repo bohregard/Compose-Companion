@@ -1,5 +1,5 @@
 rootProject.buildFileName = "build.gradle.kts"
-rootProject.name = "Bohregard Shared Library"
+rootProject.name = "Compose Companion"
 include(
     ":example",
     ":shared",
@@ -90,8 +90,8 @@ dependencyResolutionManagement {
 
             bundle("coroutines", listOf("coroutines", "coroutinesAndroid"))
 
-            library("commonMark", "org.commonmark:commonmark:0.18.2")
-            library("commonMarkTable", "org.commonmark:commonmark-ext-gfm-tables:0.18.2")
+            library("commonMark", "org.commonmark:commonmark:0.19.0")
+            library("commonMarkTable", "org.commonmark:commonmark-ext-gfm-tables:0.19.0")
 
             bundle("commonMark", listOf("commonMark", "commonMarkTable"))
         }

@@ -1,8 +1,13 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("maven-publish")
 }
+
+val PUBLISH_GROUP_ID by extra { "com.bohregard" }
+val PUBLISH_VERSION by extra { Versions.library }
+val PUBLISH_ARTIFACT_ID by extra { "markdown" }
+val PUBLISH_NAME by extra { "Compose Markdown Library" }
+val PUBLISH_DESCRIPTION by extra { "Compose Markdown Library" }
 
 apply(from = "../maven-publish-helper.gradle")
 
@@ -38,25 +43,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.compose
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("release") {
-            artifactId = "markdown"
-            pom {
-                name.set("Compose Markdown Library")
-                description.set("Compose Markdown Library")
-            }
-        }
-        create<MavenPublication>("debug") {
-            artifactId = "markdown"
-            pom {
-                name.set("Compose Markdown Library")
-                description.set("Compose Markdown Library")
-            }
-        }
     }
 }
 

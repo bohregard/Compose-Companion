@@ -1,8 +1,13 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("maven-publish")
 }
+
+val PUBLISH_GROUP_ID by extra { "com.bohregard" }
+val PUBLISH_VERSION by extra { Versions.library }
+val PUBLISH_ARTIFACT_ID by extra { "shared" }
+val PUBLISH_NAME by extra { "Shared Library" }
+val PUBLISH_DESCRIPTION by extra { "Shared Library" }
 
 apply(from = "../maven-publish-helper.gradle")
 
@@ -32,25 +37,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
         freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("release") {
-            artifactId = "shared"
-            pom {
-                name.set("Shared Library")
-                description.set("Shared Library")
-            }
-        }
-        create<MavenPublication>("debug") {
-            artifactId = "shared"
-            pom {
-                name.set("Shared Library")
-                description.set("Shared Library")
-            }
-        }
     }
 }
 

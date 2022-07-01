@@ -1,8 +1,13 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("maven-publish")
 }
+
+val PUBLISH_GROUP_ID by extra { "com.bohregard" }
+val PUBLISH_VERSION by extra { Versions.library }
+val PUBLISH_ARTIFACT_ID by extra { "shared-compose" }
+val PUBLISH_NAME by extra { "Shared Compose Library" }
+val PUBLISH_DESCRIPTION by extra { "Shared Compose Library" }
 
 apply(from = "../maven-publish-helper.gradle")
 
@@ -38,25 +43,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.compose
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("release") {
-            artifactId = "shared-compose"
-            pom {
-                name.set("Shared Compose Library")
-                description.set("Shared Compose Library")
-            }
-        }
-        create<MavenPublication>("debug") {
-            artifactId = "shared-compose"
-            pom {
-                name.set("Shared Compose Library")
-                description.set("Shared Compose Library")
-            }
-        }
     }
 }
 

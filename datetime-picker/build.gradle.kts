@@ -1,8 +1,13 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("maven-publish")
 }
+
+val PUBLISH_GROUP_ID by extra { "com.bohregard" }
+val PUBLISH_VERSION by extra { Versions.library }
+val PUBLISH_ARTIFACT_ID by extra { "datetime-picker" }
+val PUBLISH_NAME by extra { "Compose DateTime Picker Library" }
+val PUBLISH_DESCRIPTION by extra { "Compose DateTime Picker Library" }
 
 apply(from = "../maven-publish-helper.gradle")
 
@@ -38,25 +43,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.compose
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("release") {
-            artifactId = "datetime-picker"
-            pom {
-                name.set("Compose DateTime Picker Library")
-                description.set("Compose DateTime Picker Library")
-            }
-        }
-        create<MavenPublication>("debug") {
-            artifactId = "datetime-picker"
-            pom {
-                name.set("Compose DateTime Picker Library")
-                description.set("Compose DateTime Picker Library")
-            }
-        }
     }
 }
 

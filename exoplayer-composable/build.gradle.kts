@@ -1,8 +1,13 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("maven-publish")
 }
+
+val PUBLISH_GROUP_ID by extra { "com.bohregard" }
+val PUBLISH_VERSION by extra { Versions.library }
+val PUBLISH_ARTIFACT_ID by extra { "exoplayer-composable" }
+val PUBLISH_NAME by extra { "Compose Exoplayer View" }
+val PUBLISH_DESCRIPTION by extra { "Compose Exoplayer View" }
 
 apply(from = "../maven-publish-helper.gradle")
 
@@ -38,25 +43,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.compose
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("release") {
-            artifactId = "exoplayer-composable"
-            pom {
-                name.set("Compose Exoplayer View")
-                description.set("Compose Exoplayer View")
-            }
-        }
-        create<MavenPublication>("debug") {
-            artifactId = "exoplayer-composable"
-            pom {
-                name.set("Compose Exoplayer View")
-                description.set("Compose Exoplayer View")
-            }
-        }
     }
 }
 

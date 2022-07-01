@@ -1,4 +1,6 @@
+// https://github.com/GetStream/stream-chat-android/blob/develop/scripts/publish-module.gradle
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 task androidJavadocs(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
@@ -25,40 +27,62 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
+                groupId PUBLISH_GROUP_ID
+                artifactId PUBLISH_ARTIFACT_ID
+                version PUBLISH_VERSION
                 from components.release
 
 //                artifact androidJavadocsJar
                 artifact androidSourcesJar
-
-                groupId = 'com.bohregard'
-                version = library_version
-
                 pom {
+                    name = PUBLISH_ARTIFACT_ID
+                    description = PUBLISH_DESCRIPTION
+                    url = 'https://github.com/bohregard/Compose-Companion'
                     scm {
-                        connection = "scm:git:git://github.com:bohregard/Shared-Library"
-                        developerConnection = "scm:git:ssh://github.com:bohregard/Shared-Library"
-                        url = "https://github.com/bohregard/Shared-Library"
+                        connection = "scm:git:github.com:bohregard/Compose-Companion.git"
+                        developerConnection = "scm:git:ssh://github.com:bohregard/Compose-Companion.git"
+                        url = "https://github.com/bohregard/Compose-Companion"
+                    }
+
+                    licenses {
+                        license {
+                            name = 'Compose Companion License'
+                            url = 'https://github.com/bohregard/Compose-Companion/blob/master/LICENSE'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'bohregard'
+                            name = 'Anthony Todd'
+                            email = 'awtodd89@gmail.com'
+                        }
                     }
                 }
             }
 
-            debug(MavenPublication) {
-                from components.debug
-
-//                artifact androidJavadocsJar
-                artifact androidSourcesJar
-
-                groupId = 'com.bohregard'
-                version = library_version
-
-                pom {
-                    scm {
-                        connection = "scm:git:git://github.com:bohregard/Shared-Library"
-                        developerConnection = "scm:git:ssh://github.com:bohregard/Shared-Library"
-                        url = "https://github.com/bohregard/Shared-Library"
-                    }
-                }
-            }
+//            debug(MavenPublication) {
+//                groupId PUBLISH_GROUP_ID
+//                artifactId PUBLISH_ARTIFACT_ID
+//                version library_version
+//                from components.debug
+//
+////                artifact androidJavadocsJar
+//                artifact androidSourcesJar
+//
+//                groupId = 'com.bohregard'
+//                version = library_version
+//
+//                pom {
+//                    name = PUBLISH_ARTIFACT_ID
+//                    description = PUBLISH_DESCRIPTION
+//                    url = 'https://github.com/getstream/stream-chat-android'
+//                    scm {
+//                        connection = "scm:git:git://github.com:bohregard/Shared-Library"
+//                        developerConnection = "scm:git:ssh://github.com:bohregard/Shared-Library"
+//                        url = "https://github.com/bohregard/Shared-Library"
+//                    }
+//                }
+//            }
         }
 
         repositories {
@@ -72,4 +96,13 @@ afterEvaluate {
             }
         }
     }
+}
+
+signing {
+    useInMemoryPgpKeys(
+            rootProject.ext["signing.keyId"],
+            rootProject.ext["signing.key"],
+            rootProject.ext["signing.password"],
+    )
+    sign publishing.publications
 }

@@ -1,8 +1,13 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("maven-publish")
 }
+
+val PUBLISH_GROUP_ID by extra { "com.bohregard" }
+val PUBLISH_VERSION by extra { Versions.library }
+val PUBLISH_ARTIFACT_ID by extra { "animated-textfield" }
+val PUBLISH_NAME by extra { "Compose Animated Textfield Library" }
+val PUBLISH_DESCRIPTION by extra { "Compose Animated Textfield Library" }
 
 apply(from = "../maven-publish-helper.gradle")
 
@@ -41,25 +46,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.compose
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("release") {
-            artifactId = "animated-textfield"
-            pom {
-                name.set("Compose Animated Textfield Library")
-                description.set("Compose Animated Textfield Library")
-            }
-        }
-        create<MavenPublication>("debug") {
-            artifactId = "animated-textfield"
-            pom {
-                name.set("Compose Animated Textfield Library")
-                description.set("Compose Animated Textfield Library")
-            }
-        }
     }
 }
 
