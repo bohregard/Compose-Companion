@@ -1,18 +1,28 @@
 # ExoPlayer Composable
 
-<img alt="Time Picker detail" src="/img/ExoPlayer.png" width="200"/>
-
 A wrapper around ExoPlayer's UI view. Use either the `ExoPlayerDashComposable` or the `ExoPlayerMp4Composable`. Both return the `ExoPlayer` object for use as needed. If you need more control over the `ExoPlayer` object, you can use the `BaseExoPlayerComposable` and pass in your own player.
 
 When the composable is disposed, the player is released. However if you use the `BaseExoPlayerComposable` you are responsible for releasing the player.
 
 An XML layout can be used as needed. Follow the [instructions](https://exoplayer.dev/ui-components.html) on the official documentation. A composable can also be used if the `controls` field is passed in. This uses a `BoxScope` and is overlayed on the component. See the example below for more details on `controls`.
 
+<img alt="Time Picker detail" src="/img/ExoPlayer.png" width="200"/>
+
+## Configuration
+
+The `ExoPlayerConfig` object can be used to control the player's default behavior when launched. There is an `ExoPlayerConfig.DEFAULT` object if you are no concerned about the behaviors.
+
+## Cache
+
+A DataStoreCache object needs to be defined in and passed in via the `CompositionLocalProvider`. This object relies on the `SimpleCache` object and can only have one instance per directory at a time.
+
 ## Zoom/Pan
 
 Zooming and Panning is supported if it's needed. To enabled, set `zoomable = true` on the `ExoPlayerConfig` object. The minimum zoom is 1f and the maximum zoom is 6f. The panning is bounded and clipped by the box it's contained in.
 
-**Note**: If you have controls defined (via compose or XML), they will take precedent over the drag/pan gestures. However the controls can be placed below the ExoPlayer view as necessary.
+!!! info
+
+    If you have controls defined (via compose or XML), they will take precedent over the drag/pan gestures. However the controls can be placed below the ExoPlayer view as necessary.
 
 ## Example code:
 
@@ -66,3 +76,8 @@ fun ExoplayerUi(dataStoreCache: DataStoreCache) {
     }
 }
 ```
+
+## Todo
+
+- [ ] SimpleCache and DataStoreCache should be optional and part of the ExoPlayerConfig object 
+- [ ] OnError should pass back the exception that the player threw (if any)
