@@ -85,6 +85,14 @@ fun SamplePickerUi(
             }
         )
         Divider()
+        SamplePickerRowUi(
+            text = "Visible Modifier",
+            route = "visible",
+            onRowClicked = {
+                onRowClicked(it)
+            }
+        )
+        Divider()
     }
 }
 

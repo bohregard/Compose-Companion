@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.bohregard.markdown.MarkdownText
+import com.bohregard.markdown.model.MarkdownConfiguration
 
 @Composable
 fun MarkdownUi() {
@@ -95,6 +96,9 @@ fun MarkdownUi() {
     ) {
         MarkdownText(
             markdown = markdown,
+            configuration = MarkdownConfiguration(
+                onClickEvent = {}
+            ),
             textStyle = MaterialTheme.typography.bodyMedium
                 .toSpanStyle()
         )

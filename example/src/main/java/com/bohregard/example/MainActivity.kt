@@ -69,6 +69,9 @@ class MainActivity : ComponentActivity() {
                             composable("gallery-custom") {
                                 GalleryCustomIndicatorUi()
                             }
+                            composable("visible") {
+                                VisibleUi()
+                            }
                         }
                         Text(
                             modifier = Modifier.align(Alignment.BottomEnd),
