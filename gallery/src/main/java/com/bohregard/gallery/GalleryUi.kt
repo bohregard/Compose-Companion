@@ -29,14 +29,12 @@ fun Gallery(
     onVideoLayout: @Composable (VideoItem) -> Unit = {},
     onCustomLayout: (@Composable (BaseGalleryItem) -> Unit)? = null,
 
-) {
+    ) {
     val pagerState = rememberPagerState()
 
     val largestAspectRatio = items.minByOrNull { it.width / it.height.toFloat() }?.let {
         it.width / it.height.toFloat()
     } ?: 0f
-
-    println("Smallest Aspect: $largestAspectRatio")
 
     Box(
         modifier = modifier
@@ -48,40 +46,31 @@ fun Gallery(
             state = pagerState,
         ) { page ->
 
-            val item = items[page]
-
-            println("Aspect Ratio: ${item.width / item.height.toFloat()}")
-            Box(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                when(item) {
-                    is WebImage -> {
-                        AsyncImage(
-                            contentScale = contentScale,
-                            model = item.url,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .fillMaxWidth()
-                                .aspectRatio(item.width / item.height.toFloat()),
-                            contentDescription = null
-                        )
-                    }
-                    is ResourceImage -> {
-                        Image(
-                            contentScale = contentScale,
-                            painter = painterResource(id = item.resource),
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .fillMaxWidth()
-                                .aspectRatio(item.width / item.height.toFloat()),
-                            contentDescription = null
-                        )
-                    }
-                    is VideoItem -> onVideoLayout(item)
-                    else -> onCustomLayout?.invoke(item)
+            when (val item = items[page]) {
+                is WebImage -> {
+                    AsyncImage(
+                        contentScale = contentScale,
+                        model = item.url,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .fillMaxSize()
+                            .aspectRatio(item.width / item.height.toFloat()),
+                        contentDescription = null
+                    )
                 }
-
-                customIndicator?.invoke(this, page)
+                is ResourceImage -> {
+                    Image(
+                        contentScale = contentScale,
+                        painter = painterResource(id = item.resource),
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .fillMaxSize()
+                            .aspectRatio(item.width / item.height.toFloat()),
+                        contentDescription = null
+                    )
+                }
+                is VideoItem -> onVideoLayout(item)
+                else -> onCustomLayout?.invoke(item)
             }
         }
 
@@ -92,6 +81,8 @@ fun Gallery(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 16.dp),
             )
+        } else {
+            customIndicator(this, pagerState.currentPage)
         }
     }
 }
