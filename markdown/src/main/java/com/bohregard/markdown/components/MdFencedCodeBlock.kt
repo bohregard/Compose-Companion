@@ -42,6 +42,6 @@ internal fun MdFencedCodeBlock(fencedCodeBlock: FencedCodeBlock) {
             .border(1.dp, color = Color.Gray, shape = RoundedCornerShape(4.dp))
             .padding(8.dp)
     ) {
-        MdClickableText(text = annotation.toAnnotatedString())
+        MdClickableText(annotatedStringBuilder = annotation)
     }
 }

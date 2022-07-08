@@ -1,5 +1,9 @@
 package com.bohregard.markdown.model
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+
 
 class MarkdownConfiguration(
 
@@ -8,4 +12,6 @@ class MarkdownConfiguration(
      *                action to consume
      */
     val onClickEvent: () -> Unit = {},
-)
+) {
+    var showSpoilers by mutableStateOf(false)
+}

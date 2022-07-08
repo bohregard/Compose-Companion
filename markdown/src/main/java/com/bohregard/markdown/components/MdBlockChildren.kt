@@ -15,6 +15,7 @@ internal fun MdBlockChildren(parent: Node) {
             is OrderedList,
             is BulletList -> MdList(list = child)
             is Paragraph -> MdParagraph(paragraph = child)
+            else -> println("Child: $child")
         }
 
         child = child.next

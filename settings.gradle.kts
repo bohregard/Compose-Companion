@@ -90,10 +90,13 @@ dependencyResolutionManagement {
 
             bundle("coroutines", listOf("coroutines", "coroutinesAndroid"))
 
+            version("commonMark", "0.19.0")
             library("commonMark", "org.commonmark:commonmark:0.19.0")
-            library("commonMarkTable", "org.commonmark:commonmark-ext-gfm-tables:0.19.0")
+            library("commonMarkAutoLink", "org.commonmark", "commonmark-ext-autolink").versionRef("commonMark")
+            library("commonMarkTable", "org.commonmark", "commonmark-ext-gfm-tables").versionRef("commonMark")
+            library("commonMarkStrikethrough", "org.commonmark", "commonmark-ext-gfm-strikethrough").versionRef("commonMark")
 
-            bundle("commonMark", listOf("commonMark", "commonMarkTable"))
+            bundle("commonMark", listOf("commonMark", "commonMarkTable", "commonMarkAutoLink", "commonMarkStrikethrough"))
         }
     }
 }

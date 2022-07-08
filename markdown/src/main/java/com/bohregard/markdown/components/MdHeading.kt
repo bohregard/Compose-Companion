@@ -4,6 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.withStyle
+import com.bohregard.markdown.LocalMarkdownTextStyle
 import com.bohregard.markdown.util.TextParser
 import org.commonmark.node.Heading
 
@@ -18,10 +19,13 @@ internal fun MdHeading(heading: Heading) {
         6 -> MaterialTheme.typography.titleSmall
         else -> MaterialTheme.typography.bodyLarge
     }
+    val textColor = LocalMarkdownTextStyle.current.color
 
     val annotatedStringBuilder = AnnotatedString.Builder()
-    annotatedStringBuilder.withStyle(style.toSpanStyle()) {
+    annotatedStringBuilder.withStyle(
+        style.copy(color = textColor).toSpanStyle()
+    ) {
         TextParser(node = heading, annotatedStringBuilder = annotatedStringBuilder)
     }
-    MdClickableText(text = annotatedStringBuilder.toAnnotatedString())
+    MdClickableText(annotatedStringBuilder = annotatedStringBuilder)
 }

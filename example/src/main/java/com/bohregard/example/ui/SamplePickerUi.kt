@@ -46,6 +46,14 @@ fun SamplePickerUi(
         )
         Divider()
         SamplePickerRowUi(
+            text = "Markdown Collapse",
+            route = "markdown-collapse",
+            onRowClicked = {
+                onRowClicked(it)
+            }
+        )
+        Divider()
+        SamplePickerRowUi(
             text = "ExoPlayer Composable",
             route = "exoplayer",
             onRowClicked = {

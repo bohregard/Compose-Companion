@@ -17,6 +17,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bohregard.animatedtextfield.AnimatedTextField
 import com.bohregard.example.ui.*
+import com.bohregard.example.ui.markdown.MarkdownCollapseUi
+import com.bohregard.example.ui.markdown.MarkdownUi
 import com.bohregard.example.ui.zoom.ZoomModifier
 import com.bohregard.exoplayercomposable.DataStoreCache
 import com.bohregard.exoplayercomposable.ExoPlayerConfig
@@ -47,6 +49,9 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("markdown") {
                                 MarkdownUi()
+                            }
+                            composable("markdown-collapse") {
+                                MarkdownCollapseUi()
                             }
                             composable("datetime-picker") {
                                 DateTimePickerUi()
