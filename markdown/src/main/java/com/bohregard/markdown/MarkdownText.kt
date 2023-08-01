@@ -2,14 +2,14 @@ package com.bohregard.markdown
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import com.bohregard.markdown.components.MdBlockChildren
 import com.bohregard.markdown.extensions.spoiler.SpoilerExtension
 import com.bohregard.markdown.extensions.superscript.SuperscriptExtension
+import com.bohregard.markdown.model.MarkdownActions
 import com.bohregard.markdown.model.MarkdownConfiguration
 import org.commonmark.ext.autolink.AutolinkExtension
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension
@@ -28,25 +28,40 @@ fun MarkdownText(
         color = MaterialTheme.colorScheme.onSurface
     ),
 ) {
+    var showSpoilers by rememberSaveable { mutableStateOf(false) }
+    val markdownActions by remember {
+        mutableStateOf(
+            MarkdownActions(
+                onSpoilersToggled = {
+                    showSpoilers = it
+                }
+            )
+        )
+    }
+
     CompositionLocalProvider(
         LocalMarkdownTextStyle provides textStyle,
-        LocalMarkdownConfiguration provides configuration
+        LocalMarkdownConfiguration provides configuration,
+        LocalMarkdownActions provides markdownActions,
+        LocalMarkdownSpoilers provides showSpoilers
     ) {
         val parser = Parser.builder()
-            .extensions(mutableListOf(
-                TablesExtension.create(),
-                StrikethroughExtension.create(),
-                SuperscriptExtension.create(),
-                AutolinkExtension.create(),
-                SpoilerExtension.create()
-            ))
+            .extensions(
+                mutableListOf(
+                    TablesExtension.create(),
+                    StrikethroughExtension.create(),
+                    SuperscriptExtension.create(),
+                    AutolinkExtension.create(),
+                    SpoilerExtension.create()
+                )
+            )
             .build()
 
         val sb = StringBuilder()
         val reader = BufferedReader(StringReader(markdown))
 
         var line = reader.readLine()
-        while(line != null) {
+        while (line != null) {
             // Process Spoilers
             line = line.replace(">!(.*?)!<".toRegex(), "%%$1%%")
 
@@ -80,7 +95,7 @@ fun MarkdownText(
         Column(modifier = modifier) {
             // This is to track the state of showing spoilers. Otherwise the composition will never
             // recompose
-            LaunchedEffect(key1 = configuration.showSpoilers, block = {})
+//            LaunchedEffect(key1 = showSpoilers, block = {})
             MdBlockChildren(parent = document)
         }
     }

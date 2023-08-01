@@ -12,6 +12,4 @@ class MarkdownConfiguration(
      *                action to consume
      */
     val onClickEvent: () -> Unit = {},
-) {
-    var showSpoilers by mutableStateOf(false)
-}
+)

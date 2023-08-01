@@ -6,7 +6,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import com.bohregard.markdown.LocalMarkdownActions
 import com.bohregard.markdown.LocalMarkdownConfiguration
+import com.bohregard.markdown.LocalMarkdownSpoilers
 import com.bohregard.markdown.LocalMarkdownTextStyle
 
 @Composable
@@ -17,6 +19,8 @@ internal fun MdClickableText(
     val text = annotatedStringBuilder.toAnnotatedString()
     val uri = LocalUriHandler.current
     val config = LocalMarkdownConfiguration.current
+    val showSpoilers = LocalMarkdownSpoilers.current
+    val actions = LocalMarkdownActions.current
     val style = LocalMarkdownTextStyle.current
 
     ClickableText(
@@ -24,29 +28,43 @@ internal fun MdClickableText(
         style = TextStyle.Default.copy(color = style.color),
         text = text,
         onClick = {
-            if (config.showSpoilers) {
-                text.getStringAnnotations("URL", it, it)
-                    .firstOrNull()?.let { annotation ->
-                        try {
-                            uri.openUri(annotation.item)
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    } ?: run {
-                    config.onClickEvent()
+            println("it")
+            text.getStringAnnotations("URL", it, it)
+                .firstOrNull()?.let { annotation ->
+                    println("URL Annotation click")
+                    try {
+                        uri.openUri(annotation.item)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
-            } else {
-                text.getStringAnnotations("SPOILER", it, it)
-                    .firstOrNull()?.let { annotation ->
+            text.getStringAnnotations("SPOILER", it, it)
+                .firstOrNull()?.let { annotation ->
+                    println("SPOILER Annotation click")
+                    if (!showSpoilers) {
                         println("AnnotatedString: $text")
                         text.spanStyles.forEach {
                             println("Span: $it")
                         }
                         println("annotation: $annotation")
-                        config.showSpoilers = !config.showSpoilers
-                    } ?: run {
-                    config.onClickEvent()
-                }
+                        actions.onSpoilersToggled(true)
+                    } else {
+                        text.getStringAnnotations("URL", it, it)
+                            .firstOrNull()?.let { urlAnnotation ->
+                                println("URL 2 Annotation click")
+                                try {
+                                    uri.openUri(urlAnnotation.item)
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
+                            } ?: run {
+                            println("URL 2 Annotation click event run")
+                            config.onClickEvent()
+                        }
+                    }
+                } ?: run {
+                println("SPOILER Annotation click event run")
+                config.onClickEvent()
             }
         }
     )

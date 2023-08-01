@@ -1,6 +1,9 @@
 package com.bohregard.exoplayercomposable
 
 import androidx.annotation.FloatRange
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.google.android.exoplayer2.Player.REPEAT_MODE_OFF
 import com.google.android.exoplayer2.Player.RepeatMode
 
@@ -15,7 +18,7 @@ import com.google.android.exoplayer2.Player.RepeatMode
  * @param volume Set the volume of the player. Float value between 0 and 1 with 1 being the loudest
  *               and 0 being off.
  */
-data class ExoPlayerConfig(
+class ExoPlayerConfig(
     val autoPlay: Boolean,
     val controllerTimeOutMs: Int,
     val keepScreenOn: Boolean,
@@ -23,9 +26,12 @@ data class ExoPlayerConfig(
     val repeatMode: Int,
     val showController: Boolean,
     @FloatRange(from = 0.0, to = 1.0)
-    val volume: Float,
+    volume: Float,
     val zoomable: Boolean,
 ) {
+
+    var volume: Float by mutableStateOf(volume)
+
     companion object {
         val DEFAULT = ExoPlayerConfig(
             autoPlay = false,
@@ -37,4 +43,22 @@ data class ExoPlayerConfig(
             zoomable = false
         )
     }
+
+    fun copy(
+        autoPlay: Boolean = this.autoPlay,
+        controllerTimeOutMs: Int = this.controllerTimeOutMs,
+        keepScreenOn: Boolean = this.keepScreenOn,
+        repeatMode: Int = this.repeatMode,
+        showController: Boolean = this.showController,
+        volume: Float = this.volume,
+        zoomable: Boolean = this.zoomable,
+    ) = ExoPlayerConfig(
+        autoPlay = autoPlay,
+        controllerTimeOutMs = controllerTimeOutMs,
+        keepScreenOn = keepScreenOn,
+        repeatMode = repeatMode,
+        showController = showController,
+        volume = volume,
+        zoomable = zoomable
+    )
 }
