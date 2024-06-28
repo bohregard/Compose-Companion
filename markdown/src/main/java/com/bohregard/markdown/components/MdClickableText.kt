@@ -25,7 +25,7 @@ internal fun MdClickableText(
 
     ClickableText(
         modifier = modifier,
-        style = TextStyle.Default.copy(color = style.color),
+        style = TextStyle.Default.copy(color = style.color, fontSize = style.fontSize, textAlign = style.textAlign),
         text = text,
         onClick = {
             println("it")

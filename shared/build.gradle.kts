@@ -1,6 +1,6 @@
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
 }
 
 val PUBLISH_GROUP_ID by extra { "com.bohregard" }
@@ -13,6 +13,7 @@ apply(from = "../maven-publish-helper.gradle")
 
 android {
     compileSdk = Versions.compileSdk
+    namespace = "com.bohregard.shared"
 
     defaultConfig {
         minSdk = Versions.minSdk
@@ -42,12 +43,13 @@ android {
 
 dependencies {
 
-    implementation(libs.kotlin.reflect)
     implementation(libs.bundles.core)
+    implementation(libs.bundles.android.core)
+    implementation(libs.kotlin.reflect)
+    implementation(libs.androidx.annotation)
     api(libs.bundles.coroutines)
 
-    implementation(square.moshi)
+    implementation(libs.moshi)
 
-    testImplementation(testLibraries.bundles.core)
-    androidTestImplementation(instrumentation.bundles.core)
+    testImplementation(libs.junit)
 }

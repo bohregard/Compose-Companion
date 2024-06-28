@@ -1,6 +1,6 @@
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
 }
 
 val PUBLISH_GROUP_ID by extra { "com.bohregard" }
@@ -13,10 +13,11 @@ apply(from = "../maven-publish-helper.gradle")
 
 android {
     compileSdk = Versions.compileSdk
+    namespace = "com.bohregard.shared.compose"
 
     defaultConfig {
         minSdk = Versions.minSdk
-        targetSdk = Versions.compileSdk
+        testOptions.targetSdk = Versions.compileSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -42,15 +43,16 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 }
 
 dependencies {
     implementation(libs.bundles.core)
+    implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
 
-    testImplementation(testLibraries.bundles.core)
-    androidTestImplementation(instrumentation.bundles.core)
-    debugImplementation(libs.bundles.compose.debug)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.bundles.test)
+    debugImplementation(libs.bundles.compose.test)
 }

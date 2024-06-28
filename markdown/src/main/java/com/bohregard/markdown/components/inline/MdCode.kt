@@ -15,7 +15,7 @@ internal fun MdCode(annotatedStringBuilder: AnnotatedString.Builder, code: Code)
         color = MaterialTheme.colorScheme.background,
         fontFamily = FontFamily.Monospace,
         background = MaterialTheme.colorScheme.onBackground,
-    )
+    ).toSpanStyle()
 
     annotatedStringBuilder.pushStyle(codeStyle)
     annotatedStringBuilder.append(" ${code.literal} ")

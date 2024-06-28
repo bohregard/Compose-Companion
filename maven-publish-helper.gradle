@@ -92,17 +92,17 @@ afterEvaluate {
                     password githubToken
                 }
                 name = "github"
-                url = "https://maven.pkg.github.com/bohregard/Shared-Library"
+                url = "https://maven.pkg.github.com/bohregard/Compose-Companion"
             }
         }
     }
 }
 
 signing {
-    useInMemoryPgpKeys(
-            rootProject.ext["signing.keyId"],
-            rootProject.ext["signing.key"],
-            rootProject.ext["signing.password"],
-    )
+//    useInMemoryPgpKeys(
+//            rootProject.ext["signing.keyId"],
+//            rootProject.ext["signing.secretKeyRingFile"],
+//            rootProject.ext["signing.password"],
+//    )
     sign publishing.publications
 }

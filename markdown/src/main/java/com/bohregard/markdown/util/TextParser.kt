@@ -28,7 +28,7 @@ internal fun TextParser(node: Node, annotatedStringBuilder: AnnotatedString.Buil
             is Superscript -> {
                 val style = LocalMarkdownTextStyle.current.copy(
                     baselineShift = BaselineShift.Superscript
-                )
+                ).toSpanStyle()
                 annotatedStringBuilder.withStyle(style) {
                     TextParser(node = child, annotatedStringBuilder = annotatedStringBuilder)
                 }

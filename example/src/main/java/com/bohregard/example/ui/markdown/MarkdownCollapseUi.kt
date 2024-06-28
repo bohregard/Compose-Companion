@@ -39,7 +39,6 @@ fun MarkdownCollapseUi() {
                 }
             ),
             textStyle = MaterialTheme.typography.bodyMedium
-                .toSpanStyle()
         )
         Spacer(modifier = Modifier.size(100.dp))
     }

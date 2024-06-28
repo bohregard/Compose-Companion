@@ -1,10 +1,11 @@
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
     compileSdk = Versions.compileSdk
+    namespace = "com.bohregard.example"
 
     defaultConfig {
         applicationId = "com.bohregard.example"
@@ -36,10 +37,11 @@ android {
         freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 }
 
@@ -54,12 +56,12 @@ dependencies {
     implementation(project(":gallery"))
     implementation(libs.bundles.core)
 
+    implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
     implementation(libs.compose.activity)
     implementation(libs.exoplayer)
 
-    testImplementation(testLibraries.bundles.core)
-    androidTestImplementation(instrumentation.bundles.core)
+    testImplementation(libs.junit)
 
     val nav_version = "2.4.2"
 

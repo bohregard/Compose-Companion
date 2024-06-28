@@ -23,7 +23,7 @@ internal fun MdLink(annotatedStringBuilder: AnnotatedString.Builder, link: Link)
         color = if ((showSpoilers && isParentSpoiler) || !isParentSpoiler)
             MaterialTheme.colorScheme.primary else textStyle.color,
         textDecoration = TextDecoration.Underline
-    )
+    ).toSpanStyle()
     annotatedStringBuilder.pushStyle(linkStyle)
     annotatedStringBuilder.pushStringAnnotation("URL", link.destination)
     TextParser(node = link, annotatedStringBuilder = annotatedStringBuilder)

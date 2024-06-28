@@ -15,7 +15,7 @@ internal fun MdSpoiler(annotatedStringBuilder: AnnotatedString.Builder, spoiler:
     val textStyle = LocalMarkdownTextStyle.current
     val spoilerStyle = textStyle.copy(
         background = if(showSpoilers) Color.Transparent else textStyle.color,
-    )
+    ).toSpanStyle()
 
     annotatedStringBuilder.pushStyle(spoilerStyle)
     annotatedStringBuilder.pushStringAnnotation("SPOILER", "")

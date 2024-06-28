@@ -13,7 +13,7 @@ internal fun MdEmphasis(annotatedStringBuilder: AnnotatedString.Builder, emphasi
     val textStyle = LocalMarkdownTextStyle.current
     val italicStyle = textStyle.copy(
         fontStyle = FontStyle.Italic,
-    )
+    ).toSpanStyle()
     annotatedStringBuilder.withStyle(italicStyle) {
         TextParser(node = emphasis, annotatedStringBuilder = annotatedStringBuilder)
     }

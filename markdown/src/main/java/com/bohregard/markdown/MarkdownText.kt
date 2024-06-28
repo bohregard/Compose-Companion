@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import com.bohregard.markdown.components.MdBlockChildren
 import com.bohregard.markdown.extensions.spoiler.SpoilerExtension
 import com.bohregard.markdown.extensions.superscript.SuperscriptExtension
@@ -24,7 +25,7 @@ fun MarkdownText(
     modifier: Modifier = Modifier,
     markdown: String,
     configuration: MarkdownConfiguration = MarkdownConfiguration(),
-    textStyle: SpanStyle = SpanStyle(
+    textStyle: TextStyle = TextStyle(
         color = MaterialTheme.colorScheme.onSurface
     ),
 ) {

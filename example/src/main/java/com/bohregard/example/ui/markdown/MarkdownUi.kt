@@ -29,7 +29,6 @@ fun MarkdownUi() {
             ),
             textStyle = MaterialTheme.typography.bodyMedium
                 .copy(color = MaterialTheme.colorScheme.onSurface)
-                .toSpanStyle()
         )
         Spacer(modifier = Modifier.size(100.dp))
     }

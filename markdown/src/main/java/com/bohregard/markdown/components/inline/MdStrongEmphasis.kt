@@ -13,7 +13,7 @@ internal fun MdStrongEmphasis(annotatedStringBuilder: AnnotatedString.Builder, s
     val textStyle = LocalMarkdownTextStyle.current
     val boldStyle = textStyle.copy(
         fontWeight = FontWeight.Bold
-    )
+    ).toSpanStyle()
     annotatedStringBuilder.withStyle(boldStyle) {
         TextParser(node = strongEmphasis, annotatedStringBuilder = annotatedStringBuilder)
     }

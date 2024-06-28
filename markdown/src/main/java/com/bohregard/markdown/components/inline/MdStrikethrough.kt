@@ -13,7 +13,7 @@ internal fun MdStrikethrough(annotatedStringBuilder: AnnotatedString.Builder, st
     val textStyle = LocalMarkdownTextStyle.current
     val strikethroughStyle = textStyle.copy(
         textDecoration = TextDecoration.LineThrough
-    )
+    ).toSpanStyle()
     annotatedStringBuilder.withStyle(strikethroughStyle) {
         TextParser(node = strikethrough, annotatedStringBuilder = annotatedStringBuilder)
     }

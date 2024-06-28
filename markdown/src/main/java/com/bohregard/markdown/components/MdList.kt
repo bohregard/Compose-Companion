@@ -15,7 +15,7 @@ internal fun MdList(list: Node) {
     var child = list.firstChild
     var count = if (list is OrderedList) list.startNumber - 1 else 0
     while (child != null) {
-        annotatedStringBuilder.pushStyle(style)
+        annotatedStringBuilder.pushStyle(style.toSpanStyle())
         when (list) {
             is BulletList -> {
                 annotatedStringBuilder.append("• ")

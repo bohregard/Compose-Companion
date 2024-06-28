@@ -1,6 +1,6 @@
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
 }
 
 val PUBLISH_GROUP_ID by extra { "com.bohregard" }
@@ -13,6 +13,7 @@ apply(from = "../maven-publish-helper.gradle")
 
 android {
     compileSdk = Versions.compileSdk
+    namespace = "com.bohregard.markdown"
 
     defaultConfig {
         minSdk = Versions.minSdk
@@ -39,22 +40,24 @@ android {
         freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 }
 
 dependencies {
     implementation(libs.bundles.core)
 
+    implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
-    implementation(libs.bundles.commonMark)
+    implementation(libs.bundles.commonmark)
 
-    implementation(libs.coil)
+    implementation(libs.compose.coil)
 
-    testImplementation(testLibraries.bundles.core)
-    androidTestImplementation(instrumentation.bundles.core)
-    androidTestImplementation(instrumentation.bundles.compose)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.bundles.test)
+    androidTestImplementation(libs.bundles.compose.test)
 }

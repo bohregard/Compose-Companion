@@ -26,7 +26,7 @@ internal fun MdFencedCodeBlock(fencedCodeBlock: FencedCodeBlock) {
         color = MaterialTheme.colorScheme.background,
         fontFamily = FontFamily.Monospace,
         background = MaterialTheme.colorScheme.onBackground,
-    )
+    ).toSpanStyle()
 
     annotation.pushStyle(codeStyle)
     annotation.append(fencedCodeBlock.literal)

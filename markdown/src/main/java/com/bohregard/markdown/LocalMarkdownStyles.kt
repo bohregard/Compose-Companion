@@ -2,11 +2,12 @@ package com.bohregard.markdown
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import com.bohregard.markdown.model.MarkdownActions
 import com.bohregard.markdown.model.MarkdownConfiguration
 
 val LocalMarkdownTextStyle = staticCompositionLocalOf {
-    SpanStyle()
+    TextStyle()
 }
 
 val LocalMarkdownConfiguration = staticCompositionLocalOf {

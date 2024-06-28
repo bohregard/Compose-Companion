@@ -18,6 +18,7 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.STATE_READY
+import com.google.android.exoplayer2.Tracks
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
@@ -217,12 +218,8 @@ fun BaseExoPlayerComposable(
                     player.repeatMode = config.repeatMode
                     player.addListener(object : Player.Listener {
 
-                        override fun onTracksChanged(
-                            trackGroups: TrackGroupArray,
-                            trackSelections: TrackSelectionArray
-                        ) {
-                            super.onTracksChanged(trackGroups, trackSelections)
-                            hasVolume = trackGroups.hasAudioTrack()
+                        override fun onTracksChanged(tracks: Tracks) {
+                            super.onTracksChanged(tracks)
                         }
 
                         override fun onPlaybackStateChanged(state: Int) {

@@ -12,7 +12,7 @@ internal fun MdParagraph(paragraph: Paragraph) {
     val style = LocalMarkdownTextStyle.current
     // TODO Peek the children for images?
     val annotatedStringBuilder = AnnotatedString.Builder()
-    annotatedStringBuilder.withStyle(style) {
+    annotatedStringBuilder.withStyle(style.toSpanStyle()) {
         TextParser(node = paragraph, annotatedStringBuilder = annotatedStringBuilder)
     }
     MdClickableText(annotatedStringBuilder = annotatedStringBuilder)

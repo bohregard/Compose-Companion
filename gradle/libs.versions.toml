@@ -1,0 +1,97 @@
+[versions]
+kotlin = "1.9.24"
+agp = "8.5.0"
+
+android-app-compat = "1.7.0"
+android-core-ktx = "1.13.1"
+androidx-annotation = "1.8.0"
+
+accompanist = "0.24.12-rc"
+compose-compiler = "1.5.14"
+compose-bom = "2024.06.00"
+compose-plugin = "1.6.8"
+coil = "2.6.0"
+
+exoplayer = "2.19.1"
+
+commonmark = "0.19.0"
+
+espresso = "3.6.1"
+androidx-test-runner = "1.6.1"
+androidx-test-rules = "1.6.1"
+junit = "4.13.2"
+junit-ktx = "1.2.1"
+
+coroutines = "1.7.3"
+
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-common", version.ref = "kotlin" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }
+kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlin" }
+junit = { module = "junit:junit", version.ref = "junit" }
+
+# Android
+android-app-compat = { module = "androidx.appcompat:appcompat", version.ref = "android-app-compat" }
+android-core-ktx = { module = "androidx.core:core-ktx", version.ref = "android-core-ktx" }
+androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
+
+# AndroidX Test
+espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test-runner" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junit-ktx" }
+androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidx-test-rules" }
+
+# Compose
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+compose-activity = { module = "androidx.activity:activity-compose" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-material = { module = "androidx.compose.material:material" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
+compose-coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+#compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "compose-navigation" }
+
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose-plugin" }
+compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose-plugin" }
+
+# Accompanist
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
+accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
+
+# Exoplayer
+exoplayer = { module = "com.google.android.exoplayer:exoplayer", version.ref = "exoplayer" }
+
+# Common Mark
+commonmark = { module = "org.commonmark:commonmark", version.ref = "commonmark"}
+commonmark-autolink = { module = "org.commonmark:commonmark-ext-autolink", version.ref = "commonmark"}
+commonmark-table = { module = "org.commonmark:commonmark-ext-gfm-tables", version.ref = "commonmark"}
+commonmark-strikethrough = { module = "org.commonmark:commonmark-ext-gfm-strikethrough", version.ref = "commonmark"}
+
+# Coroutines
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines"}
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines"}
+
+# Moshi
+moshi = { module = "com.squareup.moshi:moshi", version = "1.13.0"}
+
+[bundles]
+core = ["kotlin-stdlib"]
+android-core = ["android-app-compat", "android-core-ktx"]
+test = ["kotlin-test", "kotlin-test-junit", "kotlin-test-common", "kotlin-test-annotations-common"]
+compose = ["compose-activity", "compose-ui", "compose-ui-tooling", "compose-material", "compose-material3", "compose-foundation"]
+compose-test = ["compose-ui-test-manifest", "compose-ui-test-junit4"]
+commonmark = ["commonmark", "commonmark-autolink", "commonmark-strikethrough", "commonmark-table"]
+coroutines = ["coroutines", "coroutines-android"]
+
+[plugins]
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }

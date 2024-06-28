@@ -1,6 +1,6 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
 }
 
 val PUBLISH_GROUP_ID by extra { "com.bohregard" }
@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         minSdk = Versions.minSdk
-        targetSdk = Versions.compileSdk
+        testOptions.targetSdk = Versions.compileSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -45,14 +45,15 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 }
 
 dependencies {
     implementation(libs.bundles.core)
+    implementation(libs.androidx.annotation)
+    implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
 
-    testImplementation(testLibraries.bundles.core)
-    androidTestImplementation(instrumentation.bundles.core)
+    testImplementation(libs.junit)
 }
