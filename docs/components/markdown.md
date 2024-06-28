@@ -13,12 +13,12 @@ A markdown parser for compose. Handles the standard markdown rules as specified 
 
 ### Styling
 
-A span style can be passed into the `MarkdownText` composable to set the style. The default is `SpanStyle(color = MaterialTheme.colorScheme.onSurface)`
+A text style can be passed into the `MarkdownText` composable to set the style. The default is `TextStyle(color = MaterialTheme.colorScheme.onSurface)`
 
 ```kotlin
 MarkdownText(
     markdown = markdown,
-    textStyle = MaterialTheme.typography.bodyMedium.toSpanStyle()
+    textStyle = MaterialTheme.typography.bodyMedium
 )
 ```
 
@@ -62,6 +62,5 @@ var markdown by remember { mutableStateOf("# Some example markdown") }
 MarkdownText(
     markdown = markdown,
     textStyle = MaterialTheme.typography.bodyMedium
-        .toSpanStyle()
 )
 ```
