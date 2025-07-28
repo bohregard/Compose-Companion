@@ -1,23 +1,31 @@
 plugins {
-    alias(libs.plugins.android.library)
+    id(libs.plugins.android.library.get().pluginId)
     alias(libs.plugins.kotlin.android)
+    id("SharedPublishing")
 }
 
-val PUBLISH_GROUP_ID by extra { "com.bohregard" }
-val PUBLISH_VERSION by extra { Versions.library }
-val PUBLISH_ARTIFACT_ID by extra { "markdown" }
-val PUBLISH_NAME by extra { "Compose Markdown Library" }
-val PUBLISH_DESCRIPTION by extra { "Compose Markdown Library" }
-
-apply(from = "../maven-publish-helper.gradle")
+sharedPublishing {
+    groupId = "com.bohregard"
+    version = Versions.library
+    artifactId = "markdown"
+    name = "Compose Markdown Library"
+    description = "Compose Markdown Library"
+}
 
 android {
     compileSdk = Versions.compileSdk
     namespace = "com.bohregard.markdown"
 
+    publishing {
+        singleVariant("release") {
+            withJavadocJar()
+            withSourcesJar()
+        }
+    }
+
     defaultConfig {
         minSdk = Versions.minSdk
-        targetSdk = Versions.compileSdk
+        testOptions.targetSdk = Versions.compileSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

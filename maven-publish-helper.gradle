@@ -2,26 +2,26 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-task androidJavadocs(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    android.libraryVariants.all { variant ->
-        if (variant.name == 'release') {
-            owner.classpath += variant.javaCompileProvider.get().classpath
-        }
-    }
-    exclude '**/R.html', '**/R.*.html', '**/index.html'
-}
-
-task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-    archiveClassifier.set('javadoc')
-    from androidJavadocs.destinationDir
-}
-
-task androidSourcesJar(type: Jar) {
-    archiveClassifier.set('sources')
-    from android.sourceSets.main.java.srcDirs
-}
+//task androidJavadocs(type: Javadoc) {
+//    source = android.sourceSets.main.java.srcDirs
+//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//    android.libraryVariants.all { variant ->
+//        if (variant.name == 'release') {
+//            owner.classpath += variant.javaCompileProvider.get().classpath
+//        }
+//    }
+//    exclude '**/R.html', '**/R.*.html', '**/index.html'
+//}
+//
+//task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+//    archiveClassifier.set('javadoc')
+//    from androidJavadocs.destinationDir
+//}
+//
+//task androidSourcesJar(type: Jar) {
+//    archiveClassifier.set('sources')
+//    from android.sourceSets.main.java.srcDirs
+//}
 
 afterEvaluate {
     publishing {
@@ -33,7 +33,7 @@ afterEvaluate {
                 from components.release
 
 //                artifact androidJavadocsJar
-                artifact androidSourcesJar
+//                artifact androidSourcesJar
                 pom {
                     name = PUBLISH_ARTIFACT_ID
                     description = PUBLISH_DESCRIPTION
@@ -99,10 +99,5 @@ afterEvaluate {
 }
 
 signing {
-//    useInMemoryPgpKeys(
-//            rootProject.ext["signing.keyId"],
-//            rootProject.ext["signing.secretKeyRingFile"],
-//            rootProject.ext["signing.password"],
-//    )
     sign publishing.publications
 }

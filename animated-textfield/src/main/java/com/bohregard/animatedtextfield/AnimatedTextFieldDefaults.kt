@@ -15,13 +15,17 @@ interface AnimatedTextFieldColors {
     fun cursorColor(isError: Boolean, interactionSource: InteractionSource): State<Color>
 
     @Composable
-    fun textColor(enabled: Boolean): State<Color>
+    fun textColor(enabled: Boolean, isError: Boolean): State<Color>
 
     @Composable
     fun backgroundColor(enabled: Boolean): State<Color>
 
     @Composable
-    fun placeholderColor(enabled: Boolean): State<Color>
+    fun placeholderColor(
+        enabled: Boolean,
+        isError: Boolean,
+        interactionSource: InteractionSource
+    ): State<Color>
 
     @Composable
     fun focusColor(
@@ -70,13 +74,16 @@ object AnimatedTextFieldDefaults {
         }
 
         @Composable
-        override fun textColor(enabled: Boolean): State<Color> {
-            return rememberUpdatedState(
-                when {
-                    enabled -> textColor
-                    else -> disabledColor
-                }
-            )
+        override fun textColor(
+            enabled: Boolean,
+            isError: Boolean
+        ): State<Color> {
+            val color = when {
+                !enabled -> disabledColor
+                isError -> errorColor
+                else -> textColor
+            }
+            return rememberUpdatedState(color)
         }
 
         @Composable
@@ -85,13 +92,20 @@ object AnimatedTextFieldDefaults {
         }
 
         @Composable
-        override fun placeholderColor(enabled: Boolean): State<Color> {
-            return rememberUpdatedState(
-                when {
-                    enabled -> placeholderColor
-                    else -> disabledColor
-                }
-            )
+        override fun placeholderColor(
+            enabled: Boolean,
+            isError: Boolean,
+            interactionSource: InteractionSource
+        ): State<Color> {
+            val isFocused by interactionSource.collectIsFocusedAsState()
+
+            val color = when {
+                !enabled -> disabledColor.copy(alpha = 0.75f)
+                isError -> errorColor.copy(alpha = 0.75f)
+                isFocused -> focusColor.copy(alpha = 0.75f)
+                else -> MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f)
+            }
+            return rememberUpdatedState(color)
         }
 
         @Composable

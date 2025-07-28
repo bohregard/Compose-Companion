@@ -1,32 +1,57 @@
 package com.bohregard.animatedtextfield
 
 import android.annotation.SuppressLint
-import androidx.annotation.DrawableRes
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.Transition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.shrinkOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absoluteOffset
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bohregard.animatedtextfield.R
 import kotlinx.coroutines.launch
 
 @SuppressLint("ModifierParameter", "UnusedTransitionTargetStateParameter")
@@ -44,7 +69,7 @@ fun AnimatedTextField(
         capitalization = KeyboardCapitalization.Words,
         imeAction = ImeAction.Next
     ),
-    @DrawableRes leadingIcon: Int? = null,
+    leadingIcon: Painter? = null,
     maxCharacters: Int? = null,
     maxLines: Int = Int.MAX_VALUE,
     modifier: Modifier = Modifier,
@@ -53,7 +78,7 @@ fun AnimatedTextField(
     readOnly: Boolean = false,
     placeholder: String? = null,
     text: String,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = if (keyboardOptions.keyboardType == KeyboardType.Password) PasswordVisualTransformation() else VisualTransformation.None
 ) {
     var textFieldValue by remember { mutableStateOf(TextFieldValue(text = text)) }
 
@@ -71,7 +96,7 @@ fun AnimatedTextField(
     val textColor by transition.animateColor(
         transitionSpec = { tween(durationMillis = 150) },
         label = "TextColor",
-        targetValueByState = { colors.textColor(enabled = enabled).value }
+        targetValueByState = { colors.textColor(enabled = enabled, isError = error).value }
     )
 
     val cursorColor by transition.animateColor(
@@ -152,7 +177,7 @@ private fun DecorationBox(
     errorMessage: String?,
     innerTextField: @Composable () -> Unit,
     interactionSource: InteractionSource,
-    @DrawableRes leadingIcon: Int? = null,
+    leadingIcon: Painter? = null,
     maxCharacters: Int?,
     movement: Animatable<Float, AnimationVector1D>,
     onClear: () -> Unit,
@@ -166,19 +191,24 @@ private fun DecorationBox(
         targetValueByState = { colors.focusColor(enabled, error, interactionSource).value }
     )
 
+    val placeholderColor = colors.placeholderColor(enabled, error, interactionSource)
+
     Column(
         modifier = Modifier
             .absoluteOffset(x = movement.value.dp)
             .heightIn(min = 40.dp)
             .fillMaxWidth()
     ) {
-        Row {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.heightIn(min = 40.dp)
+        ) {
 
             if (leadingIcon != null) {
                 Image(
                     colorFilter = ColorFilter.tint(trailingIconColor),
                     contentDescription = null,
-                    painter = painterResource(id = leadingIcon)
+                    painter = leadingIcon
                 )
                 Spacer(modifier = Modifier.size(5.dp))
             }
@@ -191,7 +221,7 @@ private fun DecorationBox(
                 Box {
                     if (text.isEmpty() && placeholder != null) {
                         Text(
-                            color = colors.placeholderColor(enabled = enabled).value,
+                            color = placeholderColor.value,
                             text = placeholder
                         )
                     }
